@@ -1,0 +1,41 @@
+<div class="container-fluid">
+    <!-- Input data -->
+    <div class="row etx-input-data" (click)="hideAutocomplete()">
+        <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+            <span class="algolia-autocomplete algolia-autocomplete-left"
+                style="position: relative; display: inline-block; direction: ltr;">
+                <input type="search" class="form-control ds-input" id="search-input" placeholder="Search..."
+                    aria-label="Search for..." autocomplete="off" spellcheck="false" role="combobox"
+                    aria-autocomplete="list" aria-expanded="false" aria-owns="algolia-autocomplete-listbox-0" dir="auto"
+                    style="position: relative; vertical-align: top;" (focus)="filterAutocomplete()"
+                    (keyup)="filterKeyPress($event)" (click)="atcClicked($event)" (change)="change2()" #atcInput [(ngModel)]="stringToSearch">
+                <pre aria-hidden="true" class="pre-custom">
+                </pre>
+                <span class="ds-dropdown-menu ds-with-1 etx-autocomplete etx-autocomplete-data" role="listbox"
+                    id="algolia-autocomplete-listbox-0" (click)="autocompleteSelected('s')" #atcData id="atcData"
+                    [ngClass]="{'etx-autocomplete-display-none': !isVisible , 'etx-autocomplete-display-block': isVisible}">
+                    
+                    <div *ngFor="let product of productsToDisplay; let k=index" class="ds-dataset-1 " value="k"
+                        (click)="autocompleteSelected(k)" 
+                        [ngClass]="{'atcSelected': k==crtSelectedIndex}" 
+                        >{{product}}
+                    </div>
+
+                </span>
+            </span>
+        </div>
+
+        <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"></div>
+        <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2"></div>
+        <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+            <button type="button" class="btn btn-primary">Login</button>
+        </div>
+
+    </div>
+
+    <div class="row">
+        adfasdfasdfasd
+    </div>
+
+
+</div>

@@ -1,6 +1,9 @@
 <div class="container-fluid headerbar">
     <div class="row">
         <div class="col d-flex align-items-center">Etix </div>
+        <div class="col d-flex align-items-center" role="button" (click)="menuOnSelect('necesar')"> <u>Necesar</u> </div>
+        <div class="col d-flex align-items-center" role="button" (click)="menuOnSelect('comanda')"> <u>Comanda</u> </div>
+        <div class="col d-flex align-items-center" role="button" (click)="menuOnSelect('istoric')"> <u>Istoric</u> </div>
         <div class="col d-flex flex-row-reverse">
             <button *ngIf="true" type="button" class="btn btn-success">Login</button>
             <button *ngIf="true" type="button" class="btn btn-danger">Logout</button>

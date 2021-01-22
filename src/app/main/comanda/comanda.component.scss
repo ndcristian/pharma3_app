@@ -1,0 +1,32 @@
+.row-product {
+    width: 20%;
+}
+.row-producer {
+    width: 10%;
+}
+.row-qt {
+    width: 5%;
+}
+.row-obs {
+    width: 25%;
+}
+.row-actions {
+    width: 7%;
+}
+.input-data{
+    margin-bottom: 1%;
+}
+select {
+    width: 100%;
+    border: 1px solid silver;
+    border-radius: 3px;
+    color: grey;
+}
+.view-comanda {
+    height: 100%;
+}
+.order-table {
+    // height: 300px;
+    height: 50% !important;
+    overflow: scroll;
+}

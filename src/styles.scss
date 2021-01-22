@@ -1,4 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
+/* Importing Bootstrap SCSS file. */
 html,
 body {
     height: 100%;
@@ -8,9 +9,112 @@ body {
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-.height100 {
-    display: block;
-    height: 100%;
-}
 
 @import "~bootstrap/scss/bootstrap";
+
+
+/* table */
+
+table {
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+    .tableActions {
+        width: 20%;
+    }
+    input {
+        font-size: small !important;
+        padding-top: 2px !important;
+        padding-bottom: 2px !important;
+    }
+    button {
+        font-size: small !important;
+        padding-top: 2px !important;
+        padding-bottom: 2px !important;
+    }
+    select {
+        font-size: small !important;
+        padding-top: 2px !important;
+        padding-bottom: 2px !important;
+    }
+}
+
+table td,
+table th {
+    border: 1px solid #ddd;
+    padding: 3px !important;
+    button {
+        margin-right: 5px;
+    }
+    font-size: small !important;
+}
+
+table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+table tr:hover {
+    background-color: #ddd;
+}
+
+table th {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    background-color: #4caf50;
+    color: white;
+    
+}
+
+.tabelRowLeft {
+    text-align: left;
+}
+.saveIcon {
+    color: blue;
+    margin-left: 4px;
+    cursor: pointer;
+}
+
+.deleteIcon {
+    color: red;
+    margin-left: 4px;
+    cursor: pointer;
+}
+.sortIcon {
+    float: right;
+    font-size: small;
+    margin: 3px;
+    cursor: pointer;
+}
+.allignCenter {
+    text-align: center !important;
+}
+.allignRight {
+    text-align: right !important;
+}
+
+// table thead tr{
+//     display:block;
+// }
+
+// table th,table td{
+//     width:100px;//fixed width
+// }
+
+
+// table  tbody{
+//   display:block;
+//   height:200px;
+// // height:100%;
+//   overflow:auto;//set tbody to auto
+// }
+
+table {
+    text-align: left;
+    position: relative;
+  }
+  
+  th {
+    background: white;
+    position: sticky;
+    top: 0;
+  }

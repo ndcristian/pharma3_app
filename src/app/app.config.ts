@@ -1,0 +1,1 @@
+export const AUTOMPLETE_MAX_ITEMS = 20;

@@ -1,0 +1,109 @@
+<div class=" view-comanda">
+    <!-- Input data -->
+    <div class="row input-data">
+        <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 ">
+            <app-automplete [idTemplate]="'Produs-Comanda'"></app-automplete>
+        </div>
+
+        <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 ">
+            <app-automplete [idTemplate]="'Producator-Comanda'"></app-automplete>
+        </div>
+        <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3  d-flex justify-content-end">
+            <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+                <option selected>Punct ...</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+            </select>
+        </div>
+        <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2  d-flex justify-content-end">
+            <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+                <option selected>Furnizor...</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+            </select>
+        </div>
+        <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1  d-flex justify-content-end">
+            <button type="button" class="btn btn-primary">Adauga</button>
+        </div>
+
+    </div>
+
+    <!-- Tabel Produse Comanda -->
+    <div class="row order-table">
+
+        <div class=" ">
+            <table class=" ">
+                <thead>
+                    <tr>
+                        <th class="row-product">Produs
+                            <span class="material-icons sortIcon ">
+                                south
+                            </span>
+                            <span class="material-icons sortIcon">
+                                north
+                            </span>
+                        </th>
+                        <th class="row-producer">Producator
+                            <span class="material-icons sortIcon ">
+                                south
+                            </span>
+                            <span class="material-icons sortIcon">
+                                north
+                            </span>
+                        </th>
+                        <th class="row-qt">Necesar</th>
+                        <th class="row-qt">Pret</th>
+                        <th class="row-qt">Discount</th>
+                        <th class="row-qt">PretFinal</th>
+                        <th class="row-qt">Comanda</th>
+                        <th class="row-obs">Observatii</th>
+                        <th class="row-actions">Actiuni</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let row of [1,2,3,4,5,6,7,8,9,8,7,6,5,4,3,2,3,3]">
+
+                        <td class="tabelRowLeft row-product">
+                            Produs {{row}}
+                        </td>
+                        <td class="tabelRowLeft row-producer">
+                            Producator
+                        </td>
+                        <td class=" allignRight row-qt">
+                            <input class="form-control form-control-sm allignRight" type="text" disabled
+                                placeholder="Necesar">
+                        </td>
+                        <td class=" allignRight row-qt">
+                            <input class="form-control form-control-sm allignRight" type="text" placeholder="Pret">
+                        </td>
+                        <td class=" allignRight row-qt">
+                            <input class="form-control form-control-sm allignRight" type="text" placeholder="Discount">
+                        </td>
+                        <td class=" allignRight row-qt">
+                            <input class="form-control form-control-sm allignRight" type="text" placeholder="PretFinal">
+                        </td>
+                        <td class=" allignRight row-qt">
+                            <input class="form-control form-control-sm allignRight" type="text" placeholder="Comanda">
+                        </td>
+                        <td class=" tabelRowLeft row-obs">
+                            <input class="form-control form-control-sm" type="text" placeholder="Observatii">
+                        </td>
+                        <td class=" row-actions">
+                            <span class="material-icons saveIcon" title="Save">
+                                save
+                            </span>
+                            <!-- <button type="button" class="btn btn-primary"  [routerLink]="['/login']">Join</button> -->
+                            <span class="material-icons deleteIcon" title="Delete">
+                                delete
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+</div>

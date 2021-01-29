@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './main/header/header.component';
 import { NecesarComponent } from './main/necesar/necesar.component';
 import { MainviewComponent } from './main/mainview/mainview.component';
-import { AutompleteComponent } from './widgets/automplete/automplete.component';
+import { AutocompleteComponent } from './widgets/autocomplete/autocomplete.component';
 import { ComandaComponent } from './main/comanda/comanda.component';
 import { IstoricComponent } from './main/istoric/istoric.component';
 
@@ -18,7 +18,7 @@ import { IstoricComponent } from './main/istoric/istoric.component';
     HeaderComponent,
     NecesarComponent,
     MainviewComponent,
-    AutompleteComponent,
+    AutocompleteComponent,
     ComandaComponent,
     IstoricComponent
     

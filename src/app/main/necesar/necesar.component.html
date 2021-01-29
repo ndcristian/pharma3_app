@@ -2,11 +2,11 @@
     <!-- Input data -->
     <div class="row input-data">
         <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 ">
-            <app-automplete [idTemplate]="'Produs-Necesar'"></app-automplete>
+            <app-autocomplete [idTemplate]="'Produs-Necesar'"></app-autocomplete>
         </div>
 
         <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 ">
-            <app-automplete [idTemplate]="'Producator-Necesar'"></app-automplete>
+            <app-autocomplete [idTemplate]="'Producator-Necesar'"></app-autocomplete>
         </div>
         <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2  d-flex justify-content-end">
             <input class="form-control" type="text" placeholder="Cantitate">
@@ -17,10 +17,17 @@
 
     </div>
 
+    <!-- Un artificial div that cover space above tabel. If not prezent this articifial div , when scroll in table
+    a part of the row scrolled is visible above the table. this div cover that part
+    -->
+    <div class="coverAboveSpace">
+        <div class="coverAboveSpaceIn"></div>
+    </div>
     <!-- Tabels section -->
     <div class="row order-table">
 
         <div class=" ">
+            
             <table class="">
                 <thead>
                     <tr>

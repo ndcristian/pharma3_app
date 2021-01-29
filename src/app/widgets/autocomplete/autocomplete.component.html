@@ -1,14 +1,14 @@
-<span class=""
-    style="position: relative; display: inline-block; direction: ltr;">
+<span class="" style="position: relative; display: inline-block; direction: ltr;">
     <input type="search" class="form-control " id="search-input" [placeholder]="placeholderName"
         aria-label="Search for..." autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list"
         aria-expanded="false" aria-owns="algolia-autocomplete-listbox-0" dir="auto"
-        style="position: relative; vertical-align: top;" (focus)="filterAutocomplete()" (keyup)="filterKeyPress($event)"
-        (click)="atcClicked($event)" (change)="change2()" #atcInput [(ngModel)]="stringToSearch">
+        style="position: relative; vertical-align: top;" (focus)="inputFocuson()" (focusout)="inputFoucuout()"
+        (keyup)="filterKeyPress($event)" (click)="atcClicked($event)" #atcInput [(ngModel)]="stringToSearch"
+        (input)="onSearchChange($event.target.value)">
     <pre aria-hidden="true" class="pre-custom">
 </pre>
-    <span class=" etx-autocomplete etx-autocomplete-data" role="listbox"
-        id="algolia-autocomplete-listbox-0" (click)="autocompleteSelected('s')" #atcData id="{{idTemplate}}"
+    <span class=" etx-autocomplete etx-autocomplete-data" role="listbox" id="algolia-autocomplete-listbox-0" #atcData
+        id="{{idTemplate}}"
         [ngClass]="{'etx-autocomplete-display-none': !isVisible , 'etx-autocomplete-display-block': isVisible}">
 
         <div *ngFor="let product of productsToDisplay; let k=index"
@@ -49,8 +49,3 @@
 
 
  -->
-
-
-
-
-

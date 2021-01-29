@@ -1,22 +1,28 @@
-import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, OnChanges, DoCheck } from '@angular/core';
 import { AUTOMPLETE_MAX_ITEMS } from '../../app.config';
 
 @Component({
-  selector: 'app-automplete',
-  templateUrl: './automplete.component.html',
-  styleUrls: ['./automplete.component.scss']
+  selector: 'app-autocomplete',
+  templateUrl: './autocomplete.component.html',
+  styleUrls: ['./autocomplete.component.scss']
 })
-export class AutompleteComponent implements OnInit {
+export class AutocompleteComponent implements OnInit {
 
   @Input() idTemplate;
   @ViewChild('atcData', { static: true }) atcDataElement: ElementRef;
   placeholderName: string;
+  /* set the visibility of drop-down */
   isVisible = false;
+  /* string displayed in input */
   stringToSearch: string = "";
+  /* drop-down mouse over status */
   isMouseOver: boolean = false;
+  /* only products to be displayed in drop-down */
   productsToDisplay: string[];
+  /* all products from database */
   products: string[] = [];
 
+  /* this keep index of drop-down iteration by arrow keys */
   crtSelectedIndex = -1;
 
   constructor() { }
@@ -29,33 +35,38 @@ export class AutompleteComponent implements OnInit {
     }
     this.productsToDisplay = this.products.slice(0, AUTOMPLETE_MAX_ITEMS);;
   }
-
-  filterAutocomplete() {
-    console.log("focus on");
+  
+  /* fired at every change on input
+  if input value is empty, then reset stringToSearch and reset productsToDisplay at the initial value
+  */
+  onSearchChange(evt) {
+       if (evt == "") {
+      /* reset stringToSearch */
+      this.stringToSearch = "";
+      /*  reset productsToDisplay at the initial value */
+      this.productsToDisplay = this.products.slice(0, AUTOMPLETE_MAX_ITEMS);
+    }
+  }
+  toggleVisible() {
+    this.isVisible = !this.isVisible;
+  }
+  /* is fired when input get fous */
+  inputFocuson() {
+    /* show drop-down */
     this.isVisible = true;
     this.isMouseOver = false;
   }
 
-  hideAutocomplete() {
-    console.log("hideAutocomplete");
-    // this.isVisible = false;
-  }
 
   autocompleteSelected(index) {
-    console.log("autocompleteSelected", index);
 
+    this.isVisible = false;
+    this.stringToSearch = this.productsToDisplay[index];
+    console.log("autocompleteSelected", index, this.productsToDisplay[index]);
   }
 
-  focusLost1() {
-    console.log("lostFocus----1");
-  }
-
-  focusLost2() {
-    console.log("lostFocus----2");
-  }
 
   iterateAutocomplete(direction: string) {
-    console.log("scroll position", document.getElementById(this.idTemplate).scrollTop);
     let currentScrollPosition = document.getElementById(this.idTemplate).scrollTop;
     if (direction == 'down') {
       this.crtSelectedIndex < AUTOMPLETE_MAX_ITEMS ? this.crtSelectedIndex++ : this.crtSelectedIndex;
@@ -75,7 +86,6 @@ export class AutompleteComponent implements OnInit {
   }
 
   filterKeyPress(evt) {
-    console.log("leters", evt);
     switch (evt.key) {
       case 'ArrowDown': {
         if (!this.isMouseOver) {
@@ -92,19 +102,20 @@ export class AutompleteComponent implements OnInit {
         break;
       }
       case 'Enter': {
-        console.log("enter press")
+        this.stringToSearch = this.productsToDisplay[this.crtSelectedIndex];
+        this.isVisible = false;
         break;
       }
       default: {
-        this.filterDisplayData(evt.key);
+        this.isVisible = true;
+        this.filterDisplayData();
         break;
       }
     }
 
   }
 
-  filterDisplayData(letter: string) {
-    console.log(this.stringToSearch);
+  filterDisplayData() {
     let temp = this.products.filter((item: string) => {
       return item.startsWith(this.stringToSearch);
     })
@@ -113,17 +124,25 @@ export class AutompleteComponent implements OnInit {
   }
 
   atcClicked(event) {
-    console.log("atcClicked", event);
-    this.filterDisplayData('cancel')
+    console.log("atcClicked")
+    this.filterDisplayData();
   }
+
+  /* is fired when mouse is over drop-down */
   mouseOverAtcData(index) {
-    console.log(index);
-
+    // console.log(index);
     this.isMouseOver = true;
+    /* crtSelectedIndex is used to mark data in drop-down
+    if mouseOver this contor mast be reset
+    */
+    this.crtSelectedIndex = -1;
+    this.stringToSearch = this.productsToDisplay[index];
+
   }
 
-  change2() {
-    console.log("change");
+  /* Testing only */
+  inputFoucuout() {
+    this.isVisible = false;
   }
 
 }

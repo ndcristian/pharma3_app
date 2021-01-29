@@ -13,6 +13,13 @@
 .row-actions {
     width: 7%;
 }
+
+.row-pl {
+    width: 50%;
+}
+.row-date{
+    width: 40%;
+}
 .input-data{
     margin-bottom: 1%;
 }
@@ -29,4 +36,24 @@ select {
     // height: 300px;
     height: 50% !important;
     overflow: scroll;
+}
+
+.pl-table {
+    height: 40% !important;
+    overflow: scroll;
+}
+
+.coverAboveSpace {
+    width: 100%;
+    height: 5px;
+    background-color: white;
+    display: flex;
+    z-index: 100;
+}
+
+.coverAboveSpaceIn {
+    width: 100%;
+    height: 110%;
+    background-color: white;
+    z-index: 100;
 }

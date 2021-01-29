@@ -2,11 +2,11 @@
     <!-- Input data -->
     <div class="row input-data">
         <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 ">
-            <app-automplete [idTemplate]="'Produs-Comanda'"></app-automplete>
+            <app-autocomplete [idTemplate]="'Produs-Comanda'"></app-autocomplete>
         </div>
 
         <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 ">
-            <app-automplete [idTemplate]="'Producator-Comanda'"></app-automplete>
+            <app-autocomplete [idTemplate]="'Producator-Comanda'"></app-autocomplete>
         </div>
         <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3  d-flex justify-content-end">
             <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
@@ -24,10 +24,15 @@
                 <option value="3">Three</option>
             </select>
         </div>
-        <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1  d-flex justify-content-end">
-            <button type="button" class="btn btn-primary">Adauga</button>
-        </div>
 
+
+    </div>
+
+    <!-- Un artificial div that cover space above tabel. If not prezent this articifial div , when scroll in table
+    a part of the row scrolled is visible above the table. this div cover that part
+    -->
+    <div class="coverAboveSpace">
+        <div class="coverAboveSpaceIn"></div>
     </div>
 
     <!-- Tabel Produse Comanda -->
@@ -104,6 +109,52 @@
             </table>
         </div>
     </div>
+
+    <!-- Details section tables -->
+    <!-- Table PL -->
+    <div class="pl-table col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+        <!-- Un artificial div that cover space above tabel. If not prezent this articifial div , when scroll in table
+    a part of the row scrolled is visible above the table. this div cover that part
+    -->
+        <div class="coverAboveSpace">
+            <div class="coverAboveSpaceIn"></div>
+        </div>
+
+        <!-- Table PL details order -->
+        <div class="row ">
+
+            <div class=" ">
+                <table class=" ">
+                    <thead>
+                        <tr>
+                            <th class="row-pl">Punct de lucru</th>
+                            <th class="row-qt">Cantitate</th>
+                            <th class="row-date">Data</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let row of [1,2,3,4,5,6,7,8,9,8,7,6,5,4,3,2,3,3]">
+
+                            <td class="tabelRowLeft row-product">
+                                Punct de lucru {{row}}
+                            </td>
+                            <td class="tabelRowLeft row-producer">
+                                3
+                            </td>
+                            <td class="tabelRowLeft row-producer">
+                                28-01-2021
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
 
 
 </div>

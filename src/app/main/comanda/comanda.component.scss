@@ -15,10 +15,10 @@
 }
 
 .row-pl {
-    width: 50%;
+    width: 30%;
 }
 .row-date{
-    width: 40%;
+    width: 10%;
 }
 .input-data{
     margin-bottom: 1%;
@@ -39,7 +39,7 @@ select {
 }
 
 .pl-table {
-    height: 40% !important;
+    height: 30% !important;
     overflow: scroll;
 }
 
@@ -56,4 +56,9 @@ select {
     height: 110%;
     background-color: white;
     z-index: 100;
+}
+
+.tabs-bar {
+    margin-top: 1%;
+    margin-bottom: 1%;
 }

@@ -7,9 +7,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ComandaComponent implements OnInit {
 
+
+  activeTab: string = "pl";
+
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  onTabSelected(selectedTab: string) {
+    console.log(selectedTab)
+    this.activeTab = selectedTab;
   }
 
 }

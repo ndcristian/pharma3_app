@@ -24,7 +24,9 @@
                 <option value="3">Three</option>
             </select>
         </div>
-
+        <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1  d-flex justify-content-end">
+            <button type="button" class="btn btn-primary">Refresh</button>
+        </div>
 
     </div>
 
@@ -95,7 +97,7 @@
                         <td class=" tabelRowLeft row-obs">
                             <input class="form-control form-control-sm" type="text" placeholder="Observatii">
                         </td>
-                        <td class=" row-actions">
+                        <td class=" row-actions allignRight">
                             <span class="material-icons saveIcon" title="Save">
                                 save
                             </span>
@@ -110,9 +112,24 @@
         </div>
     </div>
 
+    <!-- Tab selection bar -->
+    <div class=" row tabs-bar">
+        <!-- <div class="col d-flex align-items-center" role="button" > <u>Necesar / PL</u> </div>
+        <div class="col d-flex align-items-center" role="button" > <u>Conditii Comerciale</u> </div>
+        <div class="col d-flex align-items-center" role="button" > <u>Istoric Achizitii</u> </div> -->
+        <div class="col d-flex justify-content-around">
+            <button type="button" class="btn btn-success" (click)="onTabSelected('pl')">Necesar / PL</button>
+            <button type="button" class="btn btn-success" (click)="onTabSelected('comercial')">Conditii
+                Comerciale</button>
+            <button type="button" class="btn btn-success" (click)="onTabSelected('history')">Istoric Achizitii</button>
+        </div>
+
+    </div>
+
     <!-- Details section tables -->
+
     <!-- Table PL -->
-    <div class="pl-table col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+    <div *ngIf="activeTab == 'pl'" class="pl-table col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
         <!-- Un artificial div that cover space above tabel. If not prezent this articifial div , when scroll in table
     a part of the row scrolled is visible above the table. this div cover that part
     -->
@@ -130,19 +147,23 @@
                             <th class="row-pl">Punct de lucru</th>
                             <th class="row-qt">Cantitate</th>
                             <th class="row-date">Data</th>
+                            <th class="row-obs">Observatii</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let row of [1,2,3,4,5,6,7,8,9,8,7,6,5,4,3,2,3,3]">
 
-                            <td class="tabelRowLeft row-product">
+                            <td class="tabelRowLeft row-pl">
                                 Punct de lucru {{row}}
                             </td>
-                            <td class="tabelRowLeft row-producer">
+                            <td class="tabelRowRight row-qt">
                                 3
                             </td>
-                            <td class="tabelRowLeft row-producer">
+                            <td class="tabelRowRight row-date">
                                 28-01-2021
+                            </td>
+                            <td class="tabelRowLeft row-obs">
+                                asdfasdfasdfadsfd asdf
                             </td>
                         </tr>
                     </tbody>
@@ -154,6 +175,105 @@
 
 
 
+
+    <!-- Table Conditii -->
+    <div *ngIf="activeTab == 'comercial'" class="pl-table col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <!-- Un artificial div that cover space above tabel. If not prezent this articifial div , when scroll in table
+a part of the row scrolled is visible above the table. this div cover that part
+-->
+        <div class="coverAboveSpace">
+            <div class="coverAboveSpaceIn"></div>
+        </div>
+
+        <!-- Table PL details order -->
+        <div class="row ">
+
+            <div class=" ">
+                <table class=" ">
+                    <thead>
+                        <tr>
+                            <th class="row-pl">Furnizor</th>
+                            <th class="row-qt">Pret</th>
+                            <th class="row-qt">Discount</th>
+                            <th class="row-qt">PretFinal</th>
+                            <th class="row-obs">Obs</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let row of [1,2,3,4,5,6,7,8,9,8,7,6,5,4,3,2,3,3]">
+
+                            <td class="tabelRowLeft row-product">
+                                Furnizor {{row}}
+                            </td>
+                            <td class="tabelRowRight row-price">
+                                3
+                            </td>
+                            <td class="tabelRowRight row-qt">
+                                34%
+                            </td>
+                            <td class="tabelRowRight row-price">
+                                33
+                            </td>
+                            <td class="tabelRowRight row-obs">
+                                asdfasdfasdfdsf
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Table Istoric -->
+    <div *ngIf="activeTab == 'history'" class="pl-table col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <!-- Un artificial div that cover space above tabel. If not prezent this articifial div , when scroll in table
+a part of the row scrolled is visible above the table. this div cover that part
+-->
+        <div class="coverAboveSpace">
+            <div class="coverAboveSpaceIn"></div>
+        </div>
+
+        <!-- Table PL details order -->
+        <div class="row ">
+
+            <div class=" ">
+                <table class=" ">
+                    <thead>
+                        <tr>
+                            <th class="row-pl">Furnizor</th>
+                            <th class="row-qt">Pret</th>
+                            <th class="row-qt">Discount</th>
+                            <th class="row-qt">PretFinal</th>
+                            <th class="row-obs">Obs</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let row of [1,2,3,4,5,6,7,8,9,8,7,6,5,4,3,2,3,3]">
+
+                            <td class="tabelRowLeft row-product">
+                                Furnizor {{row}}
+                            </td>
+                            <td class="tabelRowRight row-price">
+                                3
+                            </td>
+                            <td class="tabelRowRight row-qt">
+                                34%
+                            </td>
+                            <td class="tabelRowRight row-price">
+                                33
+                            </td>
+                            <td class="tabelRowRight row-obs">
+                                asdfasdfasdfdsf
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
 
 
 

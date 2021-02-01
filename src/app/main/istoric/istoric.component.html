@@ -1,1 +1,104 @@
-<p>istoric works!</p>
+<div class="view-comanda">
+    <!-- Input data -->
+    <div class="row input-data">
+        <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 ">
+            <app-autocomplete [idTemplate]="'Produs-Istoric'"></app-autocomplete>
+        </div>
+
+        <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 ">
+            <app-autocomplete [idTemplate]="'Producator-Istoric'"></app-autocomplete>
+        </div>
+
+        <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3  d-flex justify-content-end">
+            <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+                <option selected>Furnizor...</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+            </select>
+        </div>
+        <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2  d-flex justify-content-end">
+            <button type="button" class="btn btn-primary">Refresh</button>
+        </div>
+
+    </div>
+
+    <!-- Un artificial div that cover space above tabel. If not prezent this articifial div , when scroll in table
+    a part of the row scrolled is visible above the table. this div cover that part
+    -->
+    <div class="coverAboveSpace">
+        <div class="coverAboveSpaceIn"></div>
+    </div>
+    <!-- Tabels section -->
+    <div class="row order-table">
+
+        <div class=" ">
+            
+            <table class="">
+                <thead>
+                    <tr>
+                        <th class="row-producer">furnizor
+                            <span class="material-icons sortIcon ">
+                                south
+                            </span>
+                            <span class="material-icons sortIcon">
+                                north
+                            </span>
+                        </th>
+
+                        <th class="row-product">Produs
+                            <span class="material-icons sortIcon ">
+                                south
+                            </span>
+                            <span class="material-icons sortIcon">
+                                north
+                            </span>
+                        </th>
+                        <th class="row-producer">Producator
+                            <span class="material-icons sortIcon ">
+                                south
+                            </span>
+                            <span class="material-icons sortIcon">
+                                north
+                            </span>
+                        </th>
+                        <th class="row-qt">Cantitate</th>
+                        <th class="row-obs">Observatii</th>
+                        <th class="row-actions">Actiuni</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let row of [1,2,3,4,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5]">
+
+                        <td class=" row-producer tabelRowLeft">
+                            Furnizor {{row}}
+                        </td>
+                        <td class="row-product tabelRowLeft">
+                            Produs {{row}}
+                        </td>
+                        <td class=" row-producer tabelRowLeft">
+                           Producator
+                        </td>
+                        <td class="row-qt allignRight">
+                            <input class="form-control form-control-sm allignRight" type="text" placeholder="123">
+                        </td>
+                        <td class="row-obs tabelRowLeft">
+                            <input class="form-control form-control-sm" type="text" placeholder="Observatii">
+                        </td>
+                        <td class=" row-actions allignRight">
+                            <span class="material-icons saveIcon" title="Save">
+                                save
+                            </span>
+                            <!-- <button type="button" class="btn btn-primary"  [routerLink]="['/login']">Join</button> -->
+                            <span class="material-icons deleteIcon" title="Delete">
+                                delete
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+</div>

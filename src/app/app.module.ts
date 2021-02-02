@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -11,6 +12,8 @@ import { AutocompleteComponent } from './widgets/autocomplete/autocomplete.compo
 import { ComandaComponent } from './main/comanda/comanda.component';
 import { IstoricComponent } from './main/istoric/istoric.component';
 
+import { TypeaheadComponent } from './widgets/typeahead/typeahead.component';
+
 
 @NgModule({
   declarations: [
@@ -20,13 +23,16 @@ import { IstoricComponent } from './main/istoric/istoric.component';
     MainviewComponent,
     AutocompleteComponent,
     ComandaComponent,
-    IstoricComponent
+    IstoricComponent,
+    TypeaheadComponent
     
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    AppRoutingModule
+    ReactiveFormsModule,
+    AppRoutingModule,
+    NgbModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

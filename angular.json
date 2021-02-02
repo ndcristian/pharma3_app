@@ -123,6 +123,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "etix3"
+    }
+  },
+  "defaultProject": "etix3",
+  "cli": {
+    "analytics": "665b452b-41b0-40ac-a386-e2d734626ab4"
+  }
 }

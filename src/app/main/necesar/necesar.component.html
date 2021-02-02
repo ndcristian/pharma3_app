@@ -1,18 +1,34 @@
 <div class="view-comanda">
     <!-- Input data -->
     <div class="row input-data">
+        <!-- select/input product -->
         <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 ">
-            <app-autocomplete [idTemplate]="'Produs-Necesar'"></app-autocomplete>
+            <ng-template #productTemplate let-r="result" let-t="term">
+                <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
+            </ng-template>
+            <input id="typeahead-necesar-products" type="text" class="form-control" [(ngModel)]="products"
+                [ngbTypeahead]="searchProduct" (focus)="focus$.next($any($event).target.value)"
+                [resultTemplate]="productTemplate" [inputFormatter]="formatterProduct" placeholder="Produs..."
+                (click)="click$.next($any($event).target.value)" #productInput="ngbTypeahead" />
         </div>
 
         <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 ">
-            <app-autocomplete [idTemplate]="'Producator-Necesar'"></app-autocomplete>
+            <!-- select/input producer -->
+            <ng-template #producerTemplate let-r="result" let-t="term">
+                <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
+            </ng-template>
+            <input id="typeahead-necesar-producers" type="text" class="form-control" [(ngModel)]="producers"
+                [ngbTypeahead]="searchProducer" (focus)="focus2$.next($any($event).target.value)"
+                [resultTemplate]="producerTemplate" [inputFormatter]="formatterProducer" placeholder="Producator..."
+                (click)="click2$.next($any($event).target.value)" #producerInput="ngbTypeahead" />
         </div>
+        <!-- input qty -->
         <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2  d-flex justify-content-end">
             <input class="form-control" type="text" placeholder="Cantitate">
         </div>
+        <!-- send data -->
         <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2  d-flex justify-content-end">
-            <button type="button" class="btn btn-primary">Adauga</button>
+            <button type="button" class="btn btn-primary" (click)="addProduct()">Adauga</button>
         </div>
 
     </div>
@@ -27,7 +43,7 @@
     <div class="row order-table">
 
         <div class=" ">
-            
+
             <table class="">
                 <thead>
                     <tr>
@@ -60,7 +76,7 @@
                             Produs {{row}}
                         </td>
                         <td class="tabelRowLeft">
-                           Producator
+                            Producator
                         </td>
                         <td class=" allignRight">
                             <input class="form-control form-control-sm allignRight" type="text" placeholder="123">

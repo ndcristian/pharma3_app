@@ -1,12 +1,26 @@
 <div class=" view-comanda">
     <!-- Input data -->
     <div class="row input-data">
+        <!-- select/input product -->
         <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 ">
-            <app-autocomplete [idTemplate]="'Produs-Comanda'"></app-autocomplete>
+            <ng-template #productTemplate let-r="result" let-t="term">
+                <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
+            </ng-template>
+            <input id="typeahead-necesar-products" type="text" class="form-control" [(ngModel)]="products"
+                [ngbTypeahead]="searchProduct" (focus)="focus$.next($any($event).target.value)"
+                [resultTemplate]="productTemplate" [inputFormatter]="formatterProduct" placeholder="Produs..."
+                (click)="click$.next($any($event).target.value)" #productInput="ngbTypeahead" />
         </div>
 
         <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 ">
-            <app-autocomplete [idTemplate]="'Producator-Comanda'"></app-autocomplete>
+            <!-- select/input producer -->
+            <ng-template #producerTemplate let-r="result" let-t="term">
+                <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
+            </ng-template>
+            <input id="typeahead-necesar-producers" type="text" class="form-control" [(ngModel)]="producers"
+                [ngbTypeahead]="searchProducer" (focus)="focus2$.next($any($event).target.value)"
+                [resultTemplate]="producerTemplate" [inputFormatter]="formatterProducer" placeholder="Producator..."
+                (click)="click2$.next($any($event).target.value)" #producerInput="ngbTypeahead" />
         </div>
         <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3  d-flex justify-content-end">
             <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">

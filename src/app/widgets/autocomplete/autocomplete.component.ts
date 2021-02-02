@@ -21,6 +21,11 @@ export class AutocompleteComponent implements OnInit {
   productsToDisplay: string[];
   /* all products from database */
   products: string[] = [];
+  /* define store URL string for each autocomplete
+  to avoid backend request fore each time we use this autocomplete,
+   we define  a string representing an action and get data from appState .
+   in appState we load all data we need one time */
+  storeUrl: string = ""
 
   /* this keep index of drop-down iteration by arrow keys */
   crtSelectedIndex = -1;
@@ -35,12 +40,12 @@ export class AutocompleteComponent implements OnInit {
     }
     this.productsToDisplay = this.products.slice(0, AUTOMPLETE_MAX_ITEMS);;
   }
-  
+
   /* fired at every change on input
   if input value is empty, then reset stringToSearch and reset productsToDisplay at the initial value
   */
   onSearchChange(evt) {
-       if (evt == "") {
+    if (evt == "") {
       /* reset stringToSearch */
       this.stringToSearch = "";
       /*  reset productsToDisplay at the initial value */

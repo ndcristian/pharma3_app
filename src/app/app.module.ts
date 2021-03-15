@@ -13,6 +13,7 @@ import { ComandaComponent } from './main/comanda/comanda.component';
 import { IstoricComponent } from './main/istoric/istoric.component';
 
 import { TypeaheadComponent } from './widgets/typeahead/typeahead.component';
+import { LoginComponent } from './credentials/login/login.component';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { TypeaheadComponent } from './widgets/typeahead/typeahead.component';
     AutocompleteComponent,
     ComandaComponent,
     IstoricComponent,
-    TypeaheadComponent
+    TypeaheadComponent,
+    LoginComponent
     
   ],
   imports: [

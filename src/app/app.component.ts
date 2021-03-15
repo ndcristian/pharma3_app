@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import {AppStateModel} from '../app/models/state.model';
+
+
 
 @Component({
   selector: 'app-root',
@@ -6,5 +9,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'etix3';
+  
 }

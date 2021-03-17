@@ -2,27 +2,29 @@
     <!-- Input data -->
     <div class="row input-data">
         <!-- select/input product -->
-        <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 ">
+        <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 ">
             <ng-template #productTemplate let-r="result" let-t="term">
-                <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
+                <ngb-highlight [result]="r.name" [term]="t" (click)="onSelectProduct2(r)"></ngb-highlight>
             </ng-template>
-            <input id="typeahead-necesar-products" type="text" class="form-control" [(ngModel)]="products"
+            <input id="typeahead-necesar-products" type="text" class="form-control" [(ngModel)]="product"
                 [ngbTypeahead]="searchProduct" (focus)="focus$.next($any($event).target.value)"
                 [resultTemplate]="productTemplate" [inputFormatter]="formatterProduct" placeholder="Produs..."
-                (click)="click$.next($any($event).target.value)" #productInput="ngbTypeahead" />
+                #productInput="ngbTypeahead" (click)="click$.next($any($event).target.value)"
+                (click)="$event.target.select()" (change)="onSelectProductTest()" />
         </div>
 
-        <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 ">
+        <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 ">
             <!-- select/input producer -->
             <ng-template #producerTemplate let-r="result" let-t="term">
                 <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
             </ng-template>
-            <input id="typeahead-necesar-producers" type="text" class="form-control" [(ngModel)]="producers"
+            <input id="typeahead-necesar-producers" type="text" class="form-control" [(ngModel)]="producer"
                 [ngbTypeahead]="searchProducer" (focus)="focus2$.next($any($event).target.value)"
                 [resultTemplate]="producerTemplate" [inputFormatter]="formatterProducer" placeholder="Producator..."
                 (click)="click2$.next($any($event).target.value)" #producerInput="ngbTypeahead" />
         </div>
-        <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3  d-flex justify-content-end">
+        <!-- PL Selection -->
+        <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2  d-flex justify-content-end">
             <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
                 <option selected>Punct ...</option>
                 <option value="1">One</option>
@@ -30,6 +32,7 @@
                 <option value="3">Three</option>
             </select>
         </div>
+        <!-- Supplier Selection -->
         <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2  d-flex justify-content-end">
             <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
                 <option selected>Furnizor...</option>
@@ -38,8 +41,13 @@
                 <option value="3">Three</option>
             </select>
         </div>
+        <!-- Reset Button -->
         <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1  d-flex justify-content-end">
-            <button type="button" class="btn btn-primary">Refresh</button>
+            <button type="button" class="btn btn-danger" (click)="resetButton()">Reset</button>
+        </div>
+        <!-- Reset Button -->
+        <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1  d-flex justify-content-end">
+            <button type="button" class="btn btn-success" >Refresh</button>
         </div>
 
     </div>

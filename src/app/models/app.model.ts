@@ -112,3 +112,24 @@ export interface OfferModel {
 
 }
 
+export interface CredentialModel {
+    id?:number;
+    username?:string;
+    password?:string;
+    email?:string;
+    role?:RoleModel;
+    context?:ContextModel;
+}
+
+export interface AuthCredentials {
+    token:string;
+    identity:UserModel;
+}
+
+export interface CookieIdentity {
+    token?:string;
+    dx?:number;
+    dlg?:number;
+}
+
+

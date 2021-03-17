@@ -13,11 +13,11 @@ export class AppStateService {
 
   constructor() { }
 
-  setAppState(newState:AppStateModel){
+  setAppState(newState: AppStateModel) {
     this.appState = newState;
   }
 
-  getAppState(){
+  getAppState():AppStateModel {
     return this.appState;
   }
 }

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { AutompleteComponent } from './autocomplete.component';
 
@@ -6,7 +6,7 @@ describe('AutompleteComponent', () => {
   let component: AutompleteComponent;
   let fixture: ComponentFixture<AutompleteComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ AutompleteComponent ]
     })

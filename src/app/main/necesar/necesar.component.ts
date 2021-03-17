@@ -1,7 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Observable, Subject, merge } from 'rxjs';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Observable, Subject, merge, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
+import { CrudService } from '../../services/crud.service';
+import { ProducerModel, ProductModel } from 'src/app/models/app.model';
+import { ROUTES_MODEL_CONFIG } from '../../models/config.models';
+import {AppStateService} from '../../services/app-state.service';
 
 
 @Component({
@@ -9,11 +13,13 @@ import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './necesar.component.html',
   styleUrls: ['./necesar.component.scss']
 })
-export class NecesarComponent implements OnInit {
+export class NecesarComponent implements OnInit , OnDestroy{
 
-  public products: any;
-  public producers: any;
+  public product: any;
+  public producer: any;
 
+  productSubscription: Subscription;
+  producerSubscription: Subscription;
 
   states2: { name: string, id: number }[] = [
     { id: 1, name: 'Alabama' },
@@ -43,9 +49,32 @@ export class NecesarComponent implements OnInit {
 
   ];
 
-  constructor() { }
+  constructor(private crudService: CrudService, private appStateService:AppStateService) { }
 
   ngOnInit(): void {
+
+    console.log("NecesarComponent onInit");
+
+    console.log(this.appStateService.getAppState());
+
+    /* Get Products */
+    this.productSubscription = this.crudService.get(ROUTES_MODEL_CONFIG.products).subscribe((items: Array<ProductModel>) => {
+      // this.productsList = items;
+    })
+    /* Get Producers */
+    this.producerSubscription = this.crudService.get(ROUTES_MODEL_CONFIG.producers).subscribe((items: Array<ProducerModel>) => {
+      // this.producersList = items;
+    })
+
+  }
+
+  ngOnDestroy(): void {
+    if (this.producerSubscription) {
+      this.producerSubscription.unsubscribe();
+    }
+    if (this.productSubscription) {
+      this.productSubscription.unsubscribe();
+    }
   }
 
 
@@ -87,7 +116,7 @@ export class NecesarComponent implements OnInit {
   formatterProducer = (x: { name: string }) => x.name;
 
   addProduct() {
-    console.log(this.producers, this.products);
+    console.log(this.producer, this.product);
   }
 
 

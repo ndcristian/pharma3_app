@@ -2,6 +2,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -14,6 +17,10 @@ import { IstoricComponent } from './main/istoric/istoric.component';
 
 import { TypeaheadComponent } from './widgets/typeahead/typeahead.component';
 import { LoginComponent } from './credentials/login/login.component';
+import { AdminComponent } from './admin/admin/admin.component';
+import { UsersComponent } from './admin/users/users.component';
+import { PosComponent } from './admin/pos/pos.component';
+import { MessageComponent } from './credentials/message/message.component';
 
 
 @NgModule({
@@ -26,11 +33,17 @@ import { LoginComponent } from './credentials/login/login.component';
     ComandaComponent,
     IstoricComponent,
     TypeaheadComponent,
-    LoginComponent
+    LoginComponent,
+    AdminComponent,
+    UsersComponent,
+    PosComponent,
+    MessageComponent
     
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,

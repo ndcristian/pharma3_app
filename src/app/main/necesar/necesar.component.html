@@ -6,7 +6,7 @@
             <ng-template #productTemplate let-r="result" let-t="term">
                 <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
             </ng-template>
-            <input id="typeahead-necesar-products" type="text" class="form-control" [(ngModel)]="products"
+            <input id="typeahead-necesar-products" type="text" class="form-control" [(ngModel)]="product"
                 [ngbTypeahead]="searchProduct" (focus)="focus$.next($any($event).target.value)"
                 [resultTemplate]="productTemplate" [inputFormatter]="formatterProduct" placeholder="Produs..."
                 (click)="click$.next($any($event).target.value)" #productInput="ngbTypeahead" />
@@ -17,7 +17,7 @@
             <ng-template #producerTemplate let-r="result" let-t="term">
                 <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
             </ng-template>
-            <input id="typeahead-necesar-producers" type="text" class="form-control" [(ngModel)]="producers"
+            <input id="typeahead-necesar-producers" type="text" class="form-control" [(ngModel)]="producer"
                 [ngbTypeahead]="searchProducer" (focus)="focus2$.next($any($event).target.value)"
                 [resultTemplate]="producerTemplate" [inputFormatter]="formatterProducer" placeholder="Producator..."
                 (click)="click2$.next($any($event).target.value)" #producerInput="ngbTypeahead" />

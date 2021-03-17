@@ -1,0 +1,22 @@
+<div class="container-fluid headerbar">
+  <div class="row">
+
+    <div class="col d-flex align-items-center meunu-admin" role="button" (click)="menuOnSelect('users')"
+      [ngClass]="{'menu-selected':activeView=='users'}">
+      <u>Adminstrare Useri</u>
+    </div>
+    <div class="col d-flex align-items-center meunu-admin" role="button" (click)="menuOnSelect('pos')"
+      [ngClass]="{'menu-selected':activeView=='pos'}">
+      <u>Administrare PL</u>
+    </div>
+
+  </div>
+</div>
+
+<div class="container-fluid contentView" *ngIf="activeView=='users'">
+  <app-users></app-users>
+</div>
+
+<div class="container-fluid contentView" *ngIf="activeView=='pos'">
+  <app-pos></app-pos>
+</div>

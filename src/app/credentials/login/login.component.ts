@@ -10,7 +10,7 @@ import { AppStateModel } from 'src/app/models/state.model';
 import { UPDATE_USER } from 'src/app/models/action.model';
 import { Router } from '@angular/router';
 import { LogoutService } from '../logout.service';
-import { updateLanguageServiceSourceFile } from 'typescript';
+
 
 @Component({
   selector: 'app-login',
@@ -61,12 +61,12 @@ export class LoginComponent implements OnInit {
         this.appStateService.setAppState({ ...this.appStateService.getAppState(), user: credentials.identity, isLogged: true });
 
         this.appStateService.appStateOnChange.next({ ...this.appStateService.getAppState(), action: UPDATE_USER })
-        debugger;
+        
         /* Redirect by role */
         if (credentials.identity.role.level == 30) {
-          this.router.navigate(['/necesar']);
+          this.router.navigate(['/']);
         } else if (credentials.identity.role.level <= 20) {
-          this.router.navigate(['/comanda']);
+          this.router.navigate(['/']);
         } else {
           this.logout.logout();
         }

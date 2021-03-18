@@ -14,6 +14,10 @@ export class CrudService {
     return this.httpClient.get(environment.apiUrl + `/${resURL}`);
   }
 
+  getById(resURL, id){
+    return this.httpClient.get(environment.apiUrl + `/${resURL}/${id}`);
+  }
+
 
   update(resURL, obj) {
     return this.httpClient.put(environment.apiUrl + `/${resURL}`, obj);

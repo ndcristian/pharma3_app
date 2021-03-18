@@ -23,20 +23,45 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   title: string = TITLE;
   user: UserModel;
-  userName: string = "Gogu";
+  userName: string = ".....";
+
+  showMenuComanda: boolean = false;
+  showMenuAdmin: boolean = false;
+  showMenuNecesar:boolean = false;
+  showMenuHistory:boolean = false;
+  showButtonLogin: boolean = false;
+  showButtonLogout: boolean = false;
+
+  activeMenu: string = "unselected";
 
   activeSubscription: Subscription;
 
   ngOnInit(): void {
     console.log("HeaderBar component onInit", this.appStateService.getAppState());
 
-    this.userName = this.appStateService.getAppState().user ? this.appStateService.getAppState().user.name : "."
+    this.userName = this.appStateService.getAppState().isLogged ? this.appStateService.getAppState().user.name : "."
+
+    this.showButtonLogin = !this.appStateService.getAppState().isLogged;
+    this.showButtonLogout = this.appStateService.getAppState().isLogged;
 
     this.appStateService.appStateOnChange.subscribe((appState: AppStateModel) => {
-      console.log("HeaderBar component onInit:subscribe", this.appStateService.getAppState());
+
       if (appState.action == UPDATE_USER) {
-        this.user = appState.user ? appState.user : {name:'.'};
+        console.log("HeaderBar component onInit:subscribe UPDATE_USER", this.appStateService.getAppState());
+        this.user = appState.user ? appState.user : { name: '.' };
         this.userName = this.user.name;
+
+        this.showButtonLogin = !appState.isLogged;
+        this.showButtonLogout = appState.isLogged;
+
+        this.showMenuNecesar = appState.isLogged;
+        this.showMenuHistory = appState.isLogged;
+
+        /* Show menus by user role level */
+        if (appState.isLogged && appState.user.role.level <= 20) {
+          this.showMenuComanda = true;
+          this.showMenuAdmin = true;
+        }
       }
 
     })
@@ -49,14 +74,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   menuOnSelect(option: string) {
     console.log(option);
+    this.activeMenu = option;
     this.router.navigate([`/${option}`]);
   }
+
 
   login() {
     this.router.navigate([`/login`]);
   }
 
   logout() {
+    this.activeMenu = "unselected";
+    this.showMenuComanda = false;
+    this.showMenuAdmin = false;
     this.logoutService.logout();
   }
 

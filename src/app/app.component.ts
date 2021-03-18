@@ -15,6 +15,6 @@ export class AppComponent {
 
   ngOnInit() {
     this.currentState = this.appstateService.getAppState();
-    this.appstateService.setAppState({ ... this.currentState });
+    this.appstateService.setAppState({ ... this.currentState, isLogged: false });
   }
 }

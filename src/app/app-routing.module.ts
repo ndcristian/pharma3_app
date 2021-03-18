@@ -3,12 +3,18 @@ import { Routes, RouterModule } from '@angular/router';
 import { NecesarComponent } from './main/necesar/necesar.component';
 import { ComandaComponent } from './main/comanda/comanda.component';
 import { IstoricComponent } from './main/istoric/istoric.component';
-import {AdminComponent} from '../app/admin/admin/admin.component';
-import {LoginComponent} from '../app/credentials/login/login.component';
-import {MessageComponent} from '../app/credentials/message/message.component';
+import {MainviewComponent} from '../app/main/mainview/mainview.component';
+import { AppComponent } from './app.component';
+import { AdminComponent } from '../app/admin/admin/admin.component';
+import { LoginComponent } from '../app/credentials/login/login.component';
+import { MessageComponent } from '../app/credentials/message/message.component';
 
 
 const routes: Routes = [
+  {
+    path: '',
+    component: MainviewComponent,
+  },
   {
     path: 'necesar',
     component: NecesarComponent,
@@ -24,21 +30,21 @@ const routes: Routes = [
   {
     path: 'admin',
     component: AdminComponent
-   },
-   {
-     path: 'login',
-     component: LoginComponent
-    },
-    {
-      path: 'message',
-      component: MessageComponent
-     }
+  },
+  {
+    path: 'login',
+    component: LoginComponent
+  },
+  {
+    path: 'message',
+    component: MessageComponent
+  }
 
-  
+
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' , useHash: true})],
+  imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy', useHash: true })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

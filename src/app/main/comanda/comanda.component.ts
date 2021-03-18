@@ -32,8 +32,7 @@ export class ComandaComponent implements OnInit, OnDestroy {
   productsList: ProducerModel[];
   producersList: ProducerModel[];
 
-  productSubscription: Subscription;
-  producerSubscription: Subscription;
+  activeSubscription: Subscription;
 
   currentAppstate: AppStateModel;
 
@@ -53,28 +52,22 @@ export class ComandaComponent implements OnInit, OnDestroy {
       this.productsList = this.currentAppstate.products;
       this.producersList = this.currentAppstate.producers;
 
-    } else {
-
-      this.appStateService.appStateOnChange.subscribe((appState: AppStateModel) => {
-
-        if (appState.action == UPDATE_PRODUCTS_PRODUCERS) {
-          this.currentAppstate = appState;
-          this.productsList = this.currentAppstate.products;
-          this.producersList = this.currentAppstate.producers;
-        }
-
-      })
     }
 
+    this.activeSubscription = this.appStateService.appStateOnChange.subscribe((appState: AppStateModel) => {
 
+      if (appState.action == UPDATE_PRODUCTS_PRODUCERS) {
+        this.currentAppstate = appState;
+        this.productsList = this.currentAppstate.products;
+        this.producersList = this.currentAppstate.producers;
+      }
+
+    })
   }
 
   ngOnDestroy(): void {
-    if (this.producerSubscription) {
-      this.producerSubscription.unsubscribe();
-    }
-    if (this.productSubscription) {
-      this.productSubscription.unsubscribe();
+    if (this.activeSubscription) {
+      this.activeSubscription.unsubscribe();
     }
   }
 
@@ -112,8 +105,6 @@ export class ComandaComponent implements OnInit, OnDestroy {
       map(term => (term === '' ? this.productsList
         : this.productsList.filter(v => v.name.toLowerCase().indexOf(term.toLowerCase()) > -1)).slice(0, 20))
     );
-
-
   }
   /* Used in template */
   formatterProduct = (x: { name: string }) => x.name;

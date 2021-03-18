@@ -10,7 +10,8 @@ export const ROUTES_MODEL_CONFIG = {
     login:"auth/generate-token",
     credentials:"auth/credentials",
     register:"auth/register",
-    contextes:"contextes"
+    contextes:"contextes",
+    users:"users"
 
 } 
 

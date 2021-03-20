@@ -11,7 +11,8 @@ export const ROUTES_MODEL_CONFIG = {
     credentials:"auth/credentials",
     register:"auth/register",
     contextes:"contextes",
-    users:"users"
+    users:"users",
+    roles:"roles",
 
 } 
 

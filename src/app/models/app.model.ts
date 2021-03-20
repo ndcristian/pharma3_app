@@ -10,11 +10,13 @@ export interface RoleModel {
     id?: number
     name?: string;
     level?: number;
+    implicit?:boolean;
 }
 
 export interface ContextModel {
     id?: number;
     name?: string;
+    implicit?:boolean;
 }
 
 export interface ProductModel {

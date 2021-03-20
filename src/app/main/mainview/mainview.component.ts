@@ -29,7 +29,7 @@ export class MainviewComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    console.log("Mainview component onInit");
+    console.log("------MainviewComponent OnInit");
 
 
     /* Set products in appState */
@@ -57,9 +57,10 @@ export class MainviewComponent implements OnInit, OnDestroy {
 
       /* Check if user is set in appState */
       if (!this.appStateService.getAppState().user) {
-        this.userSubscription = this.crudService.getById(ROUTES_MODEL_CONFIG.users, dx).subscribe((item:UserModel) => { 
-          console.log ("MainviewComponent get user::", item);
-          this.appStateService.appStateOnChange.next({...this.appStateService.getAppState(), user:item, isLogged:true, action:UPDATE_USER})
+        /* If not set, get user and set it in state */
+        this.userSubscription = this.crudService.getById(ROUTES_MODEL_CONFIG.users, dx).subscribe((item: UserModel) => {
+          this.appStateService.setAppState({ ...this.appStateService.getAppState(), user: item, isLogged: true });
+          this.appStateService.appStateOnChange.next({ ...this.appStateService.getAppState(), action: UPDATE_USER })
         });
       }
 

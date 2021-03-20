@@ -1,8 +1,8 @@
 <div class="view-comanda">
-    <!-- Input data --> 
+    <!-- Input data -->
     <div class="row input-data">
         <!-- select/input product -->
-        <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 ">
+        <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 ">
             <ng-template #productTemplate let-r="result" let-t="term">
                 <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
             </ng-template>
@@ -12,7 +12,7 @@
                 (click)="click$.next($any($event).target.value)" #productInput="ngbTypeahead" />
         </div>
 
-        <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 ">
+        <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 ">
             <!-- select/input producer -->
             <ng-template #producerTemplate let-r="result" let-t="term">
                 <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
@@ -23,12 +23,16 @@
                 (click)="click2$.next($any($event).target.value)" #producerInput="ngbTypeahead" />
         </div>
         <!-- input qty -->
-        <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2  d-flex justify-content-end">
+        <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1  d-flex justify-content-end">
             <input class="form-control" type="text" placeholder="Cantitate">
         </div>
         <!-- send data -->
-        <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2  d-flex justify-content-end">
+        <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1  d-flex justify-content-end">
             <button type="button" class="btn btn-primary" (click)="addProduct()">Adauga</button>
+        </div>
+        <!-- Refresh data -->
+        <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1  d-flex justify-content-end">
+            <button type="button" class="btn btn-success" (click)="addProduct()">Actualizeaza</button>
         </div>
 
     </div>

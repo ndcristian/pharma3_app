@@ -27,8 +27,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   showMenuComanda: boolean = false;
   showMenuAdmin: boolean = false;
-  showMenuNecesar:boolean = false;
-  showMenuHistory:boolean = false;
+  showMenuNecesar: boolean = false;
+  showMenuHistory: boolean = false;
   showButtonLogin: boolean = false;
   showButtonLogout: boolean = false;
 
@@ -37,7 +37,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   activeSubscription: Subscription;
 
   ngOnInit(): void {
-    console.log("HeaderBar component onInit", this.appStateService.getAppState());
+    console.log("------HeaderComponent OnInit");
 
     this.userName = this.appStateService.getAppState().isLogged ? this.appStateService.getAppState().user.name : "."
 
@@ -60,7 +60,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         /* Show menus by user role level */
         if (appState.isLogged && appState.user.role.level <= 20) {
           this.showMenuComanda = true;
-          this.showMenuAdmin = true;
+          this.showMenuAdmin = appState.user.role.level <= 10 ? true : false;
         }
       }
 

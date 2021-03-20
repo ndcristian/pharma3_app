@@ -33,7 +33,8 @@
                     <th class="row-username">Email</th>
                     <th class="row-password">Password</th>
                     <th class="row-name">Name</th>
-                    <th  class="row-context">Context</th>
+                    <th  class="row-context">Rol</th>
+                    <th  class="row-context">Punct de lucru</th>
                     <th class="row-actions">
                         Actions
                     </th>
@@ -49,11 +50,29 @@
                             (click)="$event.target.select()" #pwd>
                     </td>
                     <td class="row-name">{{user.name}}</td>
-                    <td class="row-context">
-                        
+
+                    <td class="row-role">
+                        <select class="form-control form-control-sm" #roleSelet 
+                            (change)='onRowSelectOption("role",roleSelet.value, user, i)'>
+                            <!-- [selected] is used only here. proprety is set only if condition is true -->
+                            <option *ngFor="let item of rolesList" value={{item.id}}
+                                [selected]="user.role ? (item.id==user.role.id) : (item.name=='anonim')">{{item.name}}
+                            </option>
+                        </select>
                     </td>
+
+                    <td class="row-context">
+                        <select class="form-control form-control-sm" #contextSelet 
+                            (change)='onRowSelectOption("role",roleSelet.value, user, i)'>
+                            <!-- [selected] is used only here. proprety is set only if condition is true -->
+                            <option *ngFor="let item of contextesList" value={{item.id}}
+                                [selected]="user.context ? (item.id==user.context.id) : (item.name=='anonim')">{{item.name}}
+                            </option>
+                        </select>
+                    </td>
+
                     <td class=" row-actions">
-                        <span class="material-icons text-primary" title="Save" role="button" (click)="udate(user,i)">
+                        <span class="material-icons text-primary" title="Save" role="button" (click)="update(user,i)">
                             save
                         </span>
                         <span class="material-icons text-danger" title="Delete" role="button" (click)="delete(user,i)">

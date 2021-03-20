@@ -3,7 +3,7 @@ import { Observable, Subject, merge, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { CrudService } from '../../services/crud.service';
-import { ProducerModel, ProductModel } from 'src/app/models/app.model';
+import { NecessaryModel, ProducerModel, ProductModel } from 'src/app/models/app.model';
 import { ROUTES_MODEL_CONFIG } from '../../models/config.models';
 import { AppStateService } from '../../services/app-state.service';
 import { AppStateModel } from 'src/app/models/state.model';
@@ -21,6 +21,7 @@ export class NecesarComponent implements OnInit, OnDestroy {
   public producer: any;
 
   activeSubscription: Subscription;
+  necessarySubscription: Subscription;
 
   productsList: ProducerModel[];
   producersList: ProducerModel[];
@@ -35,33 +36,6 @@ export class NecesarComponent implements OnInit, OnDestroy {
   focus2$ = new Subject<string>();
   click2$ = new Subject<string>();
 
-  // states2: { name: string, id: number }[] = [
-  //   { id: 1, name: 'Alabama' },
-  //   { id: 2, name: 'Alaska' },
-  //   { id: 3, name: 'American Samoa asdf asdf asdf asdf asdf' },
-  //   { id: 4, name: 'Arizona' },
-  //   { id: 7, name: 'Arkansas' },
-  //   { id: 6, name: 'California' },
-  //   { id: 8, name: 'Colorado' },
-  //   { id: 9, name: 'Washington' },
-  //   { id: 11, name: 'Oregon' },
-  //   { id: 12, name: 'Hawaii' }
-
-  // ];
-
-  // states: { name: string, id: number }[] = [
-  //   { id: 1, name: 'Alabama' },
-  //   { id: 2, name: 'Alaska' },
-  //   { id: 3, name: 'American Samoa asdf asdf asdf asdf asdf' },
-  //   { id: 4, name: 'Arizona' },
-  //   { id: 7, name: 'Arkansas' },
-  //   { id: 6, name: 'California' },
-  //   { id: 8, name: 'Colorado' },
-  //   { id: 9, name: 'Washington' },
-  //   { id: 11, name: 'Oregon' },
-  //   { id: 12, name: 'Hawaii' }
-
-  // ];
 
   constructor(private crudService: CrudService, private appStateService: AppStateService) { }
 
@@ -75,26 +49,34 @@ export class NecesarComponent implements OnInit, OnDestroy {
     To avoid this, make a subscription to update the appState
     */
     if (this.currentAppstate) {
-
       this.productsList = this.currentAppstate.products;
       this.producersList = this.currentAppstate.producers;
-
     }
 
     this.activeSubscription = this.appStateService.appStateOnChange.subscribe((appState: AppStateModel) => {
-// debugger;
+      // debugger;
       if (appState.action == UPDATE_PRODUCTS_PRODUCERS) {
         this.currentAppstate = appState;
         this.productsList = this.currentAppstate.products;
         this.producersList = this.currentAppstate.producers;
       }
-
     })
+
+    /* Get necessary */
+    // this.necessarySubscription = this.crudService.get(ROUTES_MODEL_CONFIG.necessariesGetByContext).subscribe((items: Array<NecessaryModel>) => {
+    //   console.log(items)
+    // })
+
+
   }
+
 
   ngOnDestroy(): void {
     if (this.activeSubscription) {
       this.activeSubscription.unsubscribe();
+    }
+    if (this.necessarySubscription) {
+      this.necessarySubscription.unsubscribe();
     }
   }
 

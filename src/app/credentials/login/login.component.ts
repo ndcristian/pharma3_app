@@ -64,9 +64,9 @@ export class LoginComponent implements OnInit {
         
         /* Redirect by role */
         if (credentials.identity.role.level == 30) {
-          this.router.navigate(['/']);
+          this.router.navigate(['/main']);
         } else if (credentials.identity.role.level <= 20) {
-          this.router.navigate(['/']);
+          this.router.navigate(['/main']);
         } else {
           this.logout.logout();
         }

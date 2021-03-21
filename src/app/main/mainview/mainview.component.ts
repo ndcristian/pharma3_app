@@ -39,7 +39,7 @@ export class MainviewComponent implements OnInit, OnDestroy {
       this.currentAppstate = this.appStateService.getAppState();
       this.appStateService.appStateOnChange.next({ ...this.currentAppstate, action: UPDATE_PRODUCTS_PRODUCERS });
     })
-
+    
     /* Set producers in appState */
     this.producerSubscription = this.crudService.get(ROUTES_MODEL_CONFIG.producers).subscribe((items: Array<ProducerModel>) => {
       this.currentAppstate = this.appStateService.getAppState();
@@ -70,12 +70,15 @@ export class MainviewComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-
+console.log("-------MainviewComponent::ngOnDestroy ")
     if (this.productSubscription) {
       this.productSubscription.unsubscribe()
     }
     if (this.producerSubscription) {
       this.producerSubscription.unsubscribe()
+    }
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe()
     }
   }
 

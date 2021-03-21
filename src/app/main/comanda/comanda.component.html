@@ -4,7 +4,7 @@
         <!-- select/input product -->
         <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 ">
             <ng-template #productTemplate let-r="result" let-t="term">
-                <ngb-highlight [result]="r.name" [term]="t" (click)="onSelectProduct2(r)"></ngb-highlight>
+                <ngb-highlight [result]="r.name" [term]="t" (click)="onSelectProduct(r)"></ngb-highlight>
             </ng-template>
             <input id="typeahead-necesar-products" type="text" class="form-control" [(ngModel)]="product"
                 [ngbTypeahead]="searchProduct" (focus)="focus$.next($any($event).target.value)"

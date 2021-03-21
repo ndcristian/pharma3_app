@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpParams, HttpClient } from "@angular/common/http";
 import { environment } from '.././../environments/environment';
+import {CrudFilter} from '../models/app.model';
+
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +16,19 @@ export class CrudService {
     return this.httpClient.get(environment.apiUrl + `/${resURL}`);
   }
 
-  getById(resURL, id){
+  getBy(resURL, filters: CrudFilter[]) {
+
+    let params: HttpParams =  new HttpParams();
+    if (filters.length > 0) {
+      filters.forEach((f) => {
+        params = params.set(f.proprety, f.value);
+      })
+    }
+
+    return this.httpClient.get(environment.apiUrl + `/${resURL}`, { params });
+  }
+
+  getById(resURL, id) {
     return this.httpClient.get(environment.apiUrl + `/${resURL}/${id}`);
   }
 

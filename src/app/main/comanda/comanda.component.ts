@@ -54,6 +54,7 @@ export class ComandaComponent implements OnInit, OnDestroy {
 
     }
 
+    /* Fired after login */
     this.activeSubscription = this.appStateService.appStateOnChange.subscribe((appState: AppStateModel) => {
 
       if (appState.action == UPDATE_PRODUCTS_PRODUCERS) {
@@ -63,6 +64,7 @@ export class ComandaComponent implements OnInit, OnDestroy {
       }
 
     })
+
   }
 
   ngOnDestroy(): void {
@@ -95,6 +97,9 @@ export class ComandaComponent implements OnInit, OnDestroy {
     console.log(this.currentAppstate)
   }
 
+
+
+  /* *************************Typeahead ************************************** */
   /* Serch Product */
   searchProduct = (text$: Observable<string>) => {
     const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());

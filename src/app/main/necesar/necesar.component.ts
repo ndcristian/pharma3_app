@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable, Subject, merge, Subscription } from 'rxjs';
+import { NgForm } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { CrudService } from '../../services/crud.service';
@@ -7,6 +8,7 @@ import { NecessaryModel, ProducerModel, ProductModel } from 'src/app/models/app.
 import { ROUTES_MODEL_CONFIG } from '../../models/config.models';
 import { AppStateService } from '../../services/app-state.service';
 import { AppStateModel } from 'src/app/models/state.model';
+import { CrudFilter } from '../../models/app.model';
 import { UPDATE_PRODUCTS_PRODUCERS } from '../../models/action.model';
 
 
@@ -20,14 +22,6 @@ export class NecesarComponent implements OnInit, OnDestroy {
   public product: any;
   public producer: any;
 
-  activeSubscription: Subscription;
-  necessarySubscription: Subscription;
-
-  productsList: ProducerModel[];
-  producersList: ProducerModel[];
-
-  currentAppstate: AppStateModel;
-
   @ViewChild('productInput', { static: true }) productInput: NgbTypeahead;
   @ViewChild('producerInput', { static: true }) producerInput: NgbTypeahead;
   focus$ = new Subject<string>();
@@ -36,6 +30,24 @@ export class NecesarComponent implements OnInit, OnDestroy {
   focus2$ = new Subject<string>();
   click2$ = new Subject<string>();
 
+  activeSubscription: Subscription;
+  necessarySubscription: Subscription;
+
+  productsList: ProducerModel[];
+  producersList: ProducerModel[];
+
+  currentAppstate: AppStateModel;
+  necessaryList: NecessaryModel[];
+
+  /* That means filter will be made by user context */
+  defaultNecessaryId = 0;
+
+  necessaryToSave: NecessaryModel = {};
+  selectedNecessary: NecessaryModel = {};
+
+
+
+  filters: { product?: ProducerModel, producer?: ProducerModel } = {};
 
   constructor(private crudService: CrudService, private appStateService: AppStateService) { }
 
@@ -53,6 +65,7 @@ export class NecesarComponent implements OnInit, OnDestroy {
       this.producersList = this.currentAppstate.producers;
     }
 
+    /* Fired after login */
     this.activeSubscription = this.appStateService.appStateOnChange.subscribe((appState: AppStateModel) => {
       // debugger;
       if (appState.action == UPDATE_PRODUCTS_PRODUCERS) {
@@ -62,11 +75,8 @@ export class NecesarComponent implements OnInit, OnDestroy {
       }
     })
 
-    /* Get necessary */
-    // this.necessarySubscription = this.crudService.get(ROUTES_MODEL_CONFIG.necessariesGetByContext).subscribe((items: Array<NecessaryModel>) => {
-    //   console.log(items)
-    // })
-
+    /* Get/update necessary data */
+    this.refreshNcessaryData();
 
   }
 
@@ -80,8 +90,92 @@ export class NecesarComponent implements OnInit, OnDestroy {
     }
   }
 
+  onSelectProduct(product: ProductModel) {
+    this.necessaryToSave.product = product;
+    this.filters.product = product;
+    this.producer = product.producer;
+    console.log("necessaryToSave", this.necessaryToSave);
+  }
+
+  onSelectProducer(producer: ProducerModel) {
+    this.filters.producer = producer;
+    console.log(producer);
+  }
+
+  onSelectRow(necessary: NecessaryModel) {
+    console.log("onSelectRow", necessary);
+    this.selectedNecessary = {...necessary};
+  }
+
+  onChangeQty(value: number) {
+    this.selectedNecessary.necessary = value;
+    console.log("onChangeQty", this.selectedNecessary);
+  }
+
+  onChangeObs(value: string) {
+    this.selectedNecessary.obs = value;
+    console.log("omChangeObs", this.selectedNecessary);
+  }
 
 
+  addProduct(qty: number, obs: string) {
+    console.log(qty, obs);
+    this.necessaryToSave.product = this.product;
+    this.necessaryToSave.necessary = qty;
+    this.necessaryToSave.obs = obs;
+
+    this.crudService.post(ROUTES_MODEL_CONFIG.necessaries, this.necessaryToSave).subscribe((id: number) => {
+      console.log("insertedID:", id)
+    })
+  }
+
+  /* Update row in necessary */
+  updateNecesary(necessary: NecessaryModel) {
+
+    console.log("updateNecesary", this.selectedNecessary);
+    /* Check if modified row is the same with save button clicked row 
+    Check if data was modified
+    */
+    if (
+      this.selectedNecessary.id == necessary.id &&
+      (this.selectedNecessary.necessary != necessary.necessary ||
+      this.selectedNecessary.obs != necessary.obs)
+    ) {
+      this.crudService.update(ROUTES_MODEL_CONFIG.necessaries, this.selectedNecessary).subscribe((id: number) => {
+        console.log("updatedId", id);
+      });
+    } else {
+     if (this.selectedNecessary.id != necessary.id ){
+       alert("Acest rand nu contine date modificate");
+       this.refreshNcessaryData();
+     }
+     
+    }
+
+  }
+
+  refreshNcessaryData() {
+    /* Reset fields */
+    this.producer = "";
+    this.product = "";
+    /* Reset filters */
+    this.filters = {};
+    /* Get necessary */
+    let crudFilter: CrudFilter[] = [{ proprety: "context", value: "0" }]
+    this.necessarySubscription = this.crudService.getBy(ROUTES_MODEL_CONFIG.necessariesGetByContext, crudFilter).subscribe((items: Array<NecessaryModel>) => {
+
+      this.necessaryList = items;
+    })
+  }
+
+  filterData() {
+
+    console.log(this.product, this.producer);
+
+  }
+
+
+  /* *************************Typeahead ************************************** */
   searchProduct = (text$: Observable<string>) => {
     const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
     const clicksWithClosedPopup$ = this.click$.pipe(filter(() => !this.productInput.isPopupOpen()));
@@ -110,9 +204,7 @@ export class NecesarComponent implements OnInit, OnDestroy {
 
   formatterProducer = (x: { name: string }) => x.name;
 
-  addProduct() {
-    console.log(this.producer, this.product);
-  }
+
 
 
 }

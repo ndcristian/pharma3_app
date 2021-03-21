@@ -41,19 +41,19 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let user of usersList ; let i = index" >
+                <tr *ngFor="let user of usersList ; let i = index" (click)="onSelectRow(user)">
 
                     <td class="row-name">{{user.username}} </td>
                     <td class="row-email">{{user.email}}</td>
                     <td class="row-pwd">
                         <input class="form-control form-control-sm" type="text" placeholder="New password"
-                            (click)="$event.target.select()" #pwd>
+                         (change)="onChangePassword(pwd.value)"   (click)="$event.target.select()" #pwd>
                     </td>
                     <td class="row-name">{{user.name}}</td>
 
                     <td class="row-role">
                         <select class="form-control form-control-sm" #roleSelet 
-                            (change)='onRowSelectOption("role",roleSelet.value, user, i)'>
+                            (change)='onChangeRole(roleSelet.value, user, i)'>
                             <!-- [selected] is used only here. proprety is set only if condition is true -->
                             <option *ngFor="let item of rolesList" value={{item.id}}
                                 [selected]="user.role ? (item.id==user.role.id) : (item.name=='anonim')">{{item.name}}
@@ -63,7 +63,7 @@
 
                     <td class="row-context">
                         <select class="form-control form-control-sm" #contextSelet 
-                            (change)='onRowSelectOption("role",roleSelet.value, user, i)'>
+                            (change)='onChangeContext(contextSelet.value, user, i)'>
                             <!-- [selected] is used only here. proprety is set only if condition is true -->
                             <option *ngFor="let item of contextesList" value={{item.id}}
                                 [selected]="user.context ? (item.id==user.context.id) : (item.name=='anonim')">{{item.name}}
@@ -72,7 +72,7 @@
                     </td>
 
                     <td class=" row-actions">
-                        <span class="material-icons text-primary" title="Save" role="button" (click)="update(user,i)">
+                        <span class="material-icons text-primary" title="Save" role="button" (click)="update()">
                             save
                         </span>
                         <span class="material-icons text-danger" title="Delete" role="button" (click)="delete(user,i)">

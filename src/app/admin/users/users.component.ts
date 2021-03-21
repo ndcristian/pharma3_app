@@ -23,6 +23,8 @@ export class UsersComponent implements OnInit, OnDestroy {
   defaultRole: RoleModel[];
   defaultContext: ContextModel[];
 
+  selectedUserCredentials: CredentialModel;
+
   constructor(private crudService: CrudService) { }
 
   ngOnInit(): void {
@@ -92,13 +94,47 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   }
 
-  onRowSelectOption(a, b, c, d) {
+  /* Row select - set selected user */
+  onSelectRow(credentials: CredentialModel) {
+    console.log("onSelectRow::", credentials);
+    this.selectedUserCredentials = credentials;
 
   }
 
-  update(credentials: CredentialModel, index) {
-    console.log (credentials)
-    this.crudService.update(ROUTES_MODEL_CONFIG.credentials, credentials).subscribe((id: number) => {
+  /* Change role */
+  onChangeRole(roleId: number, credentials: CredentialModel, rowIndex: number) {
+
+    let selectedRole: RoleModel[] = this.rolesList.filter((r) => {
+      return r.id == roleId;
+    })
+
+    credentials.role = selectedRole[0];
+    this.selectedUserCredentials = credentials;
+
+  }
+
+  /* Change context */
+  onChangeContext(contextId: number, credentials: CredentialModel, rowIndex: number) {
+
+    let selectedContext: ContextModel[] = this.contextesList.filter((c) => {
+      return c.id == +contextId;
+    })
+
+    credentials.context = selectedContext[0];
+    this.selectedUserCredentials = credentials;
+
+  }
+
+  onChangePassword(value: string) {
+    console.log("onChangePassword:::", value);
+    this.selectedUserCredentials.password = value;
+  }
+
+
+
+  update() {
+    console.log(this.selectedUserCredentials)
+    this.crudService.update(ROUTES_MODEL_CONFIG.credentials, this.selectedUserCredentials).subscribe((id: number) => {
 
     })
   }

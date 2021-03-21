@@ -44,13 +44,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.showButtonLogin = !this.appStateService.getAppState().isLogged;
     this.showButtonLogout = this.appStateService.getAppState().isLogged;
 
-    this.appStateService.appStateOnChange.subscribe((appState: AppStateModel) => {
+    this.activeSubscription= this.appStateService.appStateOnChange.subscribe((appState: AppStateModel) => {
 
       if (appState.action == UPDATE_USER) {
         console.log("HeaderBar component onInit:subscribe UPDATE_USER", this.appStateService.getAppState());
         this.user = appState.user ? appState.user : { name: '.' };
         this.userName = this.user.name;
 
+        /* Show/Hide menu and buttons  */
         this.showButtonLogin = !appState.isLogged;
         this.showButtonLogout = appState.isLogged;
 
@@ -60,12 +61,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
         /* Show menus by user role level */
         if (appState.isLogged && appState.user.role.level <= 20) {
           this.showMenuComanda = true;
-          this.showMenuAdmin = appState.user.role.level <= 10 ? true : false;
+
+          if(appState.user.role.level <= 10){
+            this.showMenuAdmin = true;
+          } else{
+            this.showMenuAdmin = false;
+          }
         }
       }
 
     })
   }
+
+  
   ngOnDestroy(): void {
     if (this.activeSubscription) {
       this.activeSubscription.unsubscribe();

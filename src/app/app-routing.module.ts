@@ -12,7 +12,7 @@ import { GuardService } from './credentials/auth/guard.service';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'main',
     component: MainviewComponent,
   },
   {

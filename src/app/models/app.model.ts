@@ -134,4 +134,9 @@ export interface CookieIdentity {
     dlg?:number;
 }
 
+export interface CrudFilter {
+    proprety: string;
+    value: string;
+  }
+
 

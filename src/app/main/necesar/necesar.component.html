@@ -1,15 +1,17 @@
 <div class="view-comanda">
     <!-- Input data -->
     <div class="row input-data">
+
         <!-- select/input product -->
         <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 ">
             <ng-template #productTemplate let-r="result" let-t="term">
-                <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
+                <ngb-highlight [result]="r.name" [term]="t" (click)="onSelectProduct(r)"></ngb-highlight>
             </ng-template>
             <input id="typeahead-necesar-products" type="text" class="form-control" [(ngModel)]="product"
                 [ngbTypeahead]="searchProduct" (focus)="focus$.next($any($event).target.value)"
                 [resultTemplate]="productTemplate" [inputFormatter]="formatterProduct" placeholder="Produs..."
-                (click)="click$.next($any($event).target.value)" #productInput="ngbTypeahead" />
+                (click)="click$.next($any($event).target.value)" (click)="$event.target.select()"
+                #productInput="ngbTypeahead" />
         </div>
 
         <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 ">
@@ -20,20 +22,49 @@
             <input id="typeahead-necesar-producers" type="text" class="form-control" [(ngModel)]="producer"
                 [ngbTypeahead]="searchProducer" (focus)="focus2$.next($any($event).target.value)"
                 [resultTemplate]="producerTemplate" [inputFormatter]="formatterProducer" placeholder="Producator..."
-                (click)="click2$.next($any($event).target.value)" #producerInput="ngbTypeahead" />
+                (click)="click2$.next($any($event).target.value)" (click)="$event.target.select()"
+                #producerInput="ngbTypeahead" />
         </div>
+
         <!-- input qty -->
         <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1  d-flex justify-content-end">
-            <input class="form-control" type="text" placeholder="Cantitate">
+            <input class="form-control" type="text" placeholder="Cantitate" #qty>
         </div>
-        <!-- send data -->
-        <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1  d-flex justify-content-end">
-            <button type="button" class="btn btn-primary" (click)="addProduct()">Adauga</button>
+        <!-- input obs -->
+        <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4  d-flex justify-content-end">
+            <input class="form-control" type="text" placeholder="Observatii" #obs>
         </div>
-        <!-- Refresh data -->
-        <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1  d-flex justify-content-end">
-            <button type="button" class="btn btn-success" (click)="addProduct()">Actualizeaza</button>
+
+        <!-- Buttons sections -->
+        <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2  d-flex justify-content-end">
+            <!-- send data -->
+            <div class=" col d-flex justify-content-end">
+                <button type="button" class="btn btn-primary" (click)="addProduct(qty.value, obs.value)">
+                    <span class="material-icons addIcon" title="Save">
+                        save
+                    </span>
+                </button>
+            </div>
+            <!-- Refresh data -->
+            <div class=" col d-flex justify-content-end">
+                <button type="button" class="btn btn-success" (click)="refreshNcessaryData()">
+                    <span class="material-icons saveIcon" title="Save">
+                        cached
+                    </span>
+                </button>
+            </div>
+
+            <!-- Filter data -->
+            <div class=" col d-flex justify-content-end">
+                <button type="button" class="btn btn-success" (click)="filterData()">
+                    <span class="material-icons saveIcon" title="Save">
+                        filter_alt
+                    </span>
+                </button>
+            </div>
+
         </div>
+
 
     </div>
 
@@ -74,26 +105,28 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let row of [1,2,3,4,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5]">
+                    <tr *ngFor="let row of necessaryList" (click)="onSelectRow(row)">
 
                         <td class="tabelRowLeft">
-                            Produs {{row}}
+                            {{row.product.name}}
                         </td>
                         <td class="tabelRowLeft">
-                            Producator
+                            {{row.product.producer.name}}
                         </td>
                         <td class=" allignRight">
-                            <input class="form-control form-control-sm allignRight" type="text" placeholder="123">
+                            <input class="form-control form-control-sm allignRight" type="text" value={{row.necessary}} 
+                                #necessaryQty (click)="$event.target.select()" (change)="onChangeQty(necessaryQty.value)">
                         </td>
                         <td class=" tabelRowLeft">
-                            <input class="form-control form-control-sm" type="text" placeholder="Observatii">
+                            <input class="form-control form-control-sm" type="text" value={{row.obs}}
+                                #necessaryObs (click)="$event.target.select()" (change)="onChangeObs(necessaryObs.value)">
                         </td>
-                        <td class=" row-actions">
-                            <span class="material-icons saveIcon" title="Save">
+                        <td class=" row-actions ">
+                            <span class="material-icons saveIcon " title="Save" (click)="updateNecesary(row)">
                                 save
                             </span>
                             <!-- <button type="button" class="btn btn-primary"  [routerLink]="['/login']">Join</button> -->
-                            <span class="material-icons deleteIcon" title="Delete">
+                            <span class="material-icons deleteIcon " title="Delete">
                                 delete
                             </span>
                         </td>

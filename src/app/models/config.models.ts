@@ -1,7 +1,7 @@
 export const ROUTES_MODEL_CONFIG = {
     products : "products",
     producers: "producers",
-    necessariesGetAll: "necessaries",
+    necessaries: "necessaries",
     necessariesGetByContext: "necessaries/context",
     depositGetAll: "deposit",
     depositGetFromTo: "deposit/date",

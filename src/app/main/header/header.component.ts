@@ -81,7 +81,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   menuOnSelect(option: string) {
-    console.log(option);
     this.activeMenu = option;
     this.router.navigate([`/${option}`]);
   }

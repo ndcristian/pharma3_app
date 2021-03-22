@@ -9,6 +9,10 @@
       [ngClass]="{'menu-selected':activeView=='pos'}">
       <u>Administrare PL</u>
     </div>
+    <div class="col d-flex align-items-center meunu-admin" role="button" (click)="menuOnSelect('suppliers')"
+      [ngClass]="{'menu-selected':activeView=='suppliers'}">
+      <u>Administrare Furnizori</u>
+    </div>
 
   </div>
 </div>
@@ -19,4 +23,8 @@
 
 <div class="container-fluid contentView" *ngIf="activeView=='pos'">
   <app-pos></app-pos>
+</div>
+
+<div class="container-fluid contentView" *ngIf="activeView=='suppliers'">
+  <app-suppliers></app-suppliers>
 </div>

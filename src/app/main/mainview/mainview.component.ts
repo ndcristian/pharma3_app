@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CookieIdentity, ProducerModel, UserModel } from 'src/app/models/app.model';
+import { ContextModel, CookieIdentity, ProducerModel, SupplierModel, UserModel } from 'src/app/models/app.model';
 import { AppStateModel } from 'src/app/models/state.model';
 import { AppStateService } from 'src/app/services/app-state.service';
 import { CrudService } from 'src/app/services/crud.service';
 import { COOKIE_NAME, ROUTES_MODEL_CONFIG } from '../../models/config.models';
-import { UPDATE_PRODUCTS_PRODUCERS, UPDATE_USER } from '../../models/action.model';
+import { UPDATE_CONTEXT, UPDATE_PRODUCTS_PRODUCERS, UPDATE_SUPPLIERS, UPDATE_USER } from '../../models/action.model';
 import { CookieService } from 'ngx-cookie-service';
 
 
@@ -19,6 +19,8 @@ export class MainviewComponent implements OnInit, OnDestroy {
   productSubscription: Subscription;
   producerSubscription: Subscription;
   userSubscription: Subscription;
+  contextSubscription: Subscription;
+  supplierSubscription: Subscription;
 
   currentAppstate: AppStateModel;
 
@@ -38,14 +40,26 @@ export class MainviewComponent implements OnInit, OnDestroy {
       this.appStateService.setAppState({ ...this.currentAppstate, products: items });
       this.currentAppstate = this.appStateService.getAppState();
       this.appStateService.appStateOnChange.next({ ...this.currentAppstate, action: UPDATE_PRODUCTS_PRODUCERS });
-    })
-    
+    });
+
     /* Set producers in appState */
     this.producerSubscription = this.crudService.get(ROUTES_MODEL_CONFIG.producers).subscribe((items: Array<ProducerModel>) => {
       this.currentAppstate = this.appStateService.getAppState();
       this.appStateService.setAppState({ ...this.currentAppstate, producers: items });
       this.currentAppstate = this.appStateService.getAppState();
       this.appStateService.appStateOnChange.next({ ...this.currentAppstate, action: UPDATE_PRODUCTS_PRODUCERS });
+    });
+
+    /* Set context in appState */
+    this.contextSubscription = this.crudService.get(ROUTES_MODEL_CONFIG.contextes).subscribe((items: Array<ContextModel>) => {
+      this.appStateService.setAppState({ ...this.appStateService.getAppState(), context: items });
+      this.appStateService.appStateOnChange.next({ ...this.currentAppstate, action: UPDATE_CONTEXT });
+    });
+
+    /* Set suppliers in appState */
+    this.contextSubscription = this.crudService.get(ROUTES_MODEL_CONFIG.suppliers).subscribe((items: Array<SupplierModel>) => {
+      this.appStateService.setAppState({ ...this.appStateService.getAppState(), supplier: items });
+      this.appStateService.appStateOnChange.next({ ...this.currentAppstate, action: UPDATE_SUPPLIERS });
     })
 
     /* If page refresh and cookie is set, check the if user in appState, else get it */
@@ -70,7 +84,7 @@ export class MainviewComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-console.log("-------MainviewComponent::ngOnDestroy ")
+    console.log("-------MainviewComponent::ngOnDestroy ")
     if (this.productSubscription) {
       this.productSubscription.unsubscribe()
     }
@@ -79,6 +93,12 @@ console.log("-------MainviewComponent::ngOnDestroy ")
     }
     if (this.userSubscription) {
       this.userSubscription.unsubscribe()
+    }
+    if (this.contextSubscription) {
+      this.contextSubscription.unsubscribe()
+    }
+    if (this.supplierSubscription) {
+      this.supplierSubscription.unsubscribe()
     }
   }
 

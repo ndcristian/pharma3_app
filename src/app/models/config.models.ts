@@ -13,6 +13,7 @@ export const ROUTES_MODEL_CONFIG = {
     contextes:"contextes",
     users:"users",
     roles:"roles",
+    suppliers:"suppliers"
 
 } 
 

@@ -99,12 +99,14 @@ export class NecesarComponent implements OnInit, OnDestroy {
 
   onSelectProducer(producer: ProducerModel) {
     this.filters.producer = producer;
+    delete this.filters.product;
+    this.product = "";
     console.log(producer);
   }
 
   onSelectRow(necessary: NecessaryModel) {
     console.log("onSelectRow", necessary);
-    this.selectedNecessary = {...necessary};
+    this.selectedNecessary = { ...necessary };
   }
 
   onChangeQty(value: number) {
@@ -119,14 +121,21 @@ export class NecesarComponent implements OnInit, OnDestroy {
 
 
   addProduct(qty: number, obs: string) {
-    console.log(qty, obs);
+    console.log("addProduct", qty, obs);
     this.necessaryToSave.product = this.product;
     this.necessaryToSave.necessary = qty;
     this.necessaryToSave.obs = obs;
 
-    this.crudService.post(ROUTES_MODEL_CONFIG.necessaries, this.necessaryToSave).subscribe((id: number) => {
-      console.log("insertedID:", id)
-    })
+    /* Send request only if product and qty exist */
+    if (this.necessaryToSave.product && this.necessaryToSave.necessary) {
+      this.crudService.post(ROUTES_MODEL_CONFIG.necessaries, this.necessaryToSave).subscribe((id: number) => {
+        /* Add new product at top first position in the array */
+        this.necessaryList = [this.necessaryToSave, ...this.necessaryList]
+      })
+    } else {
+      alert("Incomplet data");
+    }
+
   }
 
   /* Update row in necessary */
@@ -139,19 +148,26 @@ export class NecesarComponent implements OnInit, OnDestroy {
     if (
       this.selectedNecessary.id == necessary.id &&
       (this.selectedNecessary.necessary != necessary.necessary ||
-      this.selectedNecessary.obs != necessary.obs)
+        this.selectedNecessary.obs != necessary.obs)
     ) {
       this.crudService.update(ROUTES_MODEL_CONFIG.necessaries, this.selectedNecessary).subscribe((id: number) => {
         console.log("updatedId", id);
       });
     } else {
-     if (this.selectedNecessary.id != necessary.id ){
-       alert("Acest rand nu contine date modificate");
-       this.refreshNcessaryData();
-     }
-     
+      if (this.selectedNecessary.id != necessary.id) {
+        alert("Acest rand nu contine date modificate");
+        this.refreshNcessaryData();
+      }
     }
+  }
 
+  deleteNecessary(id: number, index: number) {
+    console.log(id, index);
+    this.crudService.delete(ROUTES_MODEL_CONFIG.necessaries, id).subscribe((id: number) => {
+      if (id && id > 0) {
+        this.necessaryList.splice(index, 1);
+       }
+    })
   }
 
   refreshNcessaryData() {
@@ -170,7 +186,19 @@ export class NecesarComponent implements OnInit, OnDestroy {
 
   filterData() {
 
-    console.log(this.product, this.producer);
+    console.log(this.filters);
+    if (this.filters.product) {
+      this.necessaryList = this.necessaryList.filter((n) => {
+        return n.product.id == this.filters.product.id;
+      })
+    }
+
+    if (this.filters.producer) {
+      this.necessaryList = this.necessaryList.filter((n) => {
+        return n.product.producer.id == this.filters.producer.id;
+      })
+    }
+
 
   }
 

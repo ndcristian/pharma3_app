@@ -26,6 +26,7 @@ import { AdminComponent } from './admin/admin/admin.component';
 import { UsersComponent } from './admin/users/users.component';
 import { PosComponent } from './admin/pos/pos.component';
 import { MessageComponent } from './credentials/message/message.component';
+import { SuppliersComponent } from './admin/suppliers/suppliers.component';
 
 
 @NgModule({
@@ -42,7 +43,8 @@ import { MessageComponent } from './credentials/message/message.component';
     AdminComponent,
     UsersComponent,
     PosComponent,
-    MessageComponent
+    MessageComponent,
+    SuppliersComponent
     
   ],
   imports: [

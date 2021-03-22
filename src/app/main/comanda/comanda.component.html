@@ -25,11 +25,10 @@
         </div>
         <!-- PL Selection -->
         <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2  d-flex justify-content-end">
-            <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
-                <option selected>Punct ...</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+            <select class="custom-select mr-sm-2" id="commandContext">
+                <option *ngFor="let item of contextList" value={{item.id}}
+                    >{{item.name}}
+                </option>
             </select>
         </div>
         <!-- Supplier Selection -->
@@ -47,7 +46,7 @@
         </div>
         <!-- Reset Button -->
         <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1  d-flex justify-content-end">
-            <button type="button" class="btn btn-success" >Refresh</button>
+            <button type="button" class="btn btn-success">Refresh</button>
         </div>
 
     </div>
@@ -134,16 +133,15 @@
         </div>
     </div>
 
+    <!-- ********************************************************************************************* -->
     <!-- Tab selection bar -->
     <div class=" row tabs-bar">
-        <!-- <div class="col d-flex align-items-center" role="button" > <u>Necesar / PL</u> </div>
-        <div class="col d-flex align-items-center" role="button" > <u>Conditii Comerciale</u> </div>
-        <div class="col d-flex align-items-center" role="button" > <u>Istoric Achizitii</u> </div> -->
+
         <div class="col d-flex justify-content-around">
-            <button type="button" class="btn btn-success" (click)="onTabSelected('pl')">Necesar / PL</button>
-            <button type="button" class="btn btn-success" (click)="onTabSelected('comercial')">Conditii
+            <button type="button" class="btn btn-success" (click)="onSelectTab('pl')">Necesar / PL</button>
+            <button type="button" class="btn btn-success" (click)="onSelectTab('comercial')">Conditii
                 Comerciale</button>
-            <button type="button" class="btn btn-success" (click)="onTabSelected('history')">Istoric Achizitii</button>
+            <button type="button" class="btn btn-success" (click)="onSelectTab('history')">Istoric Achizitii</button>
         </div>
 
     </div>

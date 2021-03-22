@@ -39,7 +39,7 @@ export interface SupplierModel {
 
 export interface NecessaryModel {
     id?: number;
-    product?: ProducerModel;
+    product?: ProductModel;
     necessary?: number;
     ordered?: number;
     rest?: number;

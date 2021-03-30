@@ -84,8 +84,14 @@ export class UsersComponent implements OnInit, OnDestroy {
         context: this.defaultContext[0]
       }
       console.log(userToInsert)
-      this.crudService.post(ROUTES_MODEL_CONFIG.register, form.value).subscribe((id: Number) => {
-        this.usersList.push(form.value);
+      this.crudService.post(ROUTES_MODEL_CONFIG.register, form.value).subscribe((id: number) => {
+     console.log("inserted id:",id )
+        if (id && id > 0) {
+          this.usersList.push(form.value);
+          /* assign id to user added */
+          this.usersList[this.usersList.length - 1].id = id;
+        }
+
       })
 
     } else {

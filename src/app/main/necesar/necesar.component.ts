@@ -91,10 +91,15 @@ export class NecesarComponent implements OnInit, OnDestroy {
   }
 
   onSelectProduct(product: ProductModel) {
-    this.necessaryToSave.product = product;
     this.filters.product = product;
     this.producer = product.producer;
-    console.log("necessaryToSave", this.necessaryToSave);
+    console.log("necessaryToSave on select", this.necessaryToSave);
+  }
+
+  onSelectProductKeyPress() {
+    this.filters.product = this.product;
+    this.producer = this.product.producer;
+    console.log("necessaryToSave on select", this.necessaryToSave);
   }
 
   onSelectProducer(producer: ProducerModel) {
@@ -130,7 +135,12 @@ export class NecesarComponent implements OnInit, OnDestroy {
     if (this.necessaryToSave.product && this.necessaryToSave.necessary) {
       this.crudService.post(ROUTES_MODEL_CONFIG.necessaries, this.necessaryToSave).subscribe((id: number) => {
         /* Add new product at top first position in the array */
-        this.necessaryList = [this.necessaryToSave, ...this.necessaryList]
+        if (id < 0) {
+          alert("Produsul exista deja in necesar")
+        } else {
+          this.necessaryList = [this.necessaryToSave, ...this.necessaryList];
+        }
+
       })
     } else {
       alert("Incomplet data");
@@ -166,7 +176,7 @@ export class NecesarComponent implements OnInit, OnDestroy {
     this.crudService.delete(ROUTES_MODEL_CONFIG.necessaries, id).subscribe((id: number) => {
       if (id && id > 0) {
         this.necessaryList.splice(index, 1);
-       }
+      }
     })
   }
 
@@ -198,8 +208,6 @@ export class NecesarComponent implements OnInit, OnDestroy {
         return n.product.producer.id == this.filters.producer.id;
       })
     }
-
-
   }
 
 

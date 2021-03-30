@@ -23,30 +23,39 @@
                 [resultTemplate]="producerTemplate" [inputFormatter]="formatterProducer" placeholder="Producator..."
                 (click)="click2$.next($any($event).target.value)" #producerInput="ngbTypeahead" />
         </div>
-        <!-- PL Selection -->
+        <!-- Context Selection -->
         <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2  d-flex justify-content-end">
-            <select class="custom-select mr-sm-2" id="commandContext">
-                <option *ngFor="let item of contextList" value={{item.id}}
-                    >{{item.name}}
+            <select class="custom-select mr-sm-2" id="commandContext" #comandaContext
+                (click)="onSelectContext(comandaContext.value)">
+                <option *ngFor="let item of contextList" value={{item.id}} [selected]="item.implicit">
+                    {{item.name}}
                 </option>
             </select>
         </div>
         <!-- Supplier Selection -->
         <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2  d-flex justify-content-end">
-            <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
-                <option selected>Furnizor...</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+            <select class="custom-select mr-sm-2" id="commandSupplier" #commandSupplier 
+            (click)="onSelectSupplier(commandSupplier.value)">
+                <option *ngFor="let item of supplierList" value={{item.id}} [selected]="item.implicit">
+                    {{item.name}}
+                </option>
             </select>
         </div>
-        <!-- Reset Button -->
-        <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1  d-flex justify-content-end">
-            <button type="button" class="btn btn-danger" (click)="resetButton()">Reset</button>
+        <!-- Filter data -->
+        <div class=" col d-flex justify-content-end">
+            <button type="button" class="btn btn-success" (click)="filterData()">
+                <span class="material-icons addIcon" title="Filter">
+                    filter_alt
+                </span>
+            </button>
         </div>
-        <!-- Reset Button -->
+        <!-- Refresh Button -->
         <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1  d-flex justify-content-end">
-            <button type="button" class="btn btn-success">Refresh</button>
+            <button type="button" class="btn btn-success" (click)="refreshNcessaryData()">
+                <span class="material-icons addIcon" title="Refresh">
+                    cached
+                </span>
+            </button>
         </div>
 
     </div>
@@ -65,6 +74,7 @@
             <table class=" ">
                 <thead>
                     <tr>
+                        <th class="row-qt allignCenter">#</th>
                         <th class="row-product">Produs
                             <span class="material-icons sortIcon ">
                                 south
@@ -85,44 +95,70 @@
                         <th class="row-qt">Pret</th>
                         <th class="row-qt">Discount</th>
                         <th class="row-qt">PretFinal</th>
+                        <th class="row-qt allignCenter">#</th>
+                        <th class="row-qt">Comandat</th>
+                        <th class="row-qt">Rest</th>
                         <th class="row-qt">Comanda</th>
                         <th class="row-obs">Observatii</th>
                         <th class="row-actions">Actiuni</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let row of [1,2,3,4,5,6,7,8,9,8,7,6,5,4,3,2,3,3]">
+                    <tr *ngFor="let row of necessaryList; let i = index" (click)="onSelectRow(row)" [ngClass]="{'odd':i%2==0}">
 
+                        <td class=" row-details allignCenter">
+                            <span class="material-icons saveIcon" title="Save">
+                                dehaze
+                            </span>
+                        </td>
                         <td class="tabelRowLeft row-product">
-                            Produs {{row}}
+                            {{row.product.name}}
                         </td>
                         <td class="tabelRowLeft row-producer">
-                            Producator
+                            {{row.product.producer.name}}
                         </td>
                         <td class=" allignRight row-qt">
                             <input class="form-control form-control-sm allignRight" type="text" disabled
-                                placeholder="Necesar">
+                                value="{{row.necessary}}" placeholder="Necesar">
                         </td>
                         <td class=" allignRight row-qt">
-                            <input class="form-control form-control-sm allignRight" type="text" placeholder="Pret">
+                            <input class="form-control form-control-sm allignRight" type="text" placeholder="Pret"
+                             #orderPrice (click)="$event.target.select()" (change)="onChangePret(orderPrice.value)">
                         </td>
                         <td class=" allignRight row-qt">
-                            <input class="form-control form-control-sm allignRight" type="text" placeholder="Discount">
+                            <input class="form-control form-control-sm allignRight" type="text" placeholder="Discount"
+                             #orderDiscount (click)="$event.target.select()" (change)="onChangeDiscount(orderDiscount.value)">
                         </td>
                         <td class=" allignRight row-qt">
-                            <input class="form-control form-control-sm allignRight" type="text" placeholder="PretFinal">
+                            <input class="form-control form-control-sm allignRight" type="text" placeholder="PretFinal" 
+                            #orderFinalPrice disabled 
+                            value="{{orderPrice.value>0 ? (orderPrice.value*(1-orderDiscount.value/100)).toFixed(2) : ''}}" >
+                        </td>
+                        <td class=" row-details allignCenter">
+                            <span class="material-icons saveIcon" title="Save" (click)="saveOffer()">
+                                save_alt
+                            </span>
                         </td>
                         <td class=" allignRight row-qt">
-                            <input class="form-control form-control-sm allignRight" type="text" placeholder="Comanda">
+                            <input class="form-control form-control-sm allignRight" type="text" value="{{row.ordered}}" disabled
+                               placeholder="Comanda">
+                        </td>
+                        <td class=" allignRight row-qt">
+                            <input class="form-control form-control-sm allignRight" type="text" value="{{row.rest}}" disabled
+                               placeholder="Comanda">
+                        </td>
+                        <td class=" allignRight row-qt">
+                            <input class="form-control form-control-sm allignRight" type="text" (click)="$event.target.select()"
+                               #orderNewQty (change)="onChangeOrderQty(orderNewQty.value)">
                         </td>
                         <td class=" tabelRowLeft row-obs">
-                            <input class="form-control form-control-sm" type="text" placeholder="Observatii">
+                            <input class="form-control form-control-sm" type="text" 
+                            #orderObs (change)="onChangeObs(orderObs.value)" (click)="$event.target.select()">
                         </td>
-                        <td class=" row-actions allignRight">
-                            <span class="material-icons saveIcon" title="Save">
+                        <td class=" row-actions allignCenter">
+                            <span class="material-icons saveIcon" title="Save"(click)="saveOrder(i)">
                                 save
                             </span>
-                            <!-- <button type="button" class="btn btn-primary"  [routerLink]="['/login']">Join</button> -->
                             <span class="material-icons deleteIcon" title="Delete">
                                 delete
                             </span>

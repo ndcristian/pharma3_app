@@ -38,6 +38,7 @@ export class SuppliersComponent implements OnInit {
       this.crudService.post(ROUTES_MODEL_CONFIG.suppliers, form.value).subscribe((id: Number) => {
         console.log("inserted id:", id);
         this.supplierList.push(form.value);
+        
       })
     } else {
       alert("Date incomplete!");

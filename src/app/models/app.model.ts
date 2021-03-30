@@ -10,13 +10,14 @@ export interface RoleModel {
     id?: number
     name?: string;
     level?: number;
-    implicit?:boolean;
+    implicit?: boolean;
 }
 
 export interface ContextModel {
     id?: number;
     name?: string;
-    implicit?:boolean;
+    implicit?: boolean;
+    central?: boolean;
 }
 
 export interface ProductModel {
@@ -35,6 +36,7 @@ export interface ProducerModel {
 export interface SupplierModel {
     id?: number;
     name?: string;
+    implicit?: boolean;
 }
 
 export interface NecessaryModel {
@@ -60,7 +62,7 @@ export interface NecessaryModel {
 
 export interface DepositModel {
     id?: number;
-    product?: ProducerModel;
+    product?: ProductModel;
     necessary?: number;
     ordered?: number;
     rest?: number;
@@ -76,6 +78,7 @@ export interface DepositModel {
     modified?: Date;
     creator?: number;
     modifier?: number;
+    context?: number;
 
 }
 
@@ -100,8 +103,8 @@ export interface HistoryModel {
 export interface OfferModel {
 
     id?: number;
-    product?: ProducerModel;
-    supplier?: SupplierModel;
+    product?: number;
+    supplier?: number;
     discount?: number;
     price?: number;
     final_price?: number;
@@ -115,28 +118,28 @@ export interface OfferModel {
 }
 
 export interface CredentialModel {
-    id?:number;
-    username?:string;
-    password?:string;
-    email?:string;
-    role?:RoleModel;
-    context?:ContextModel;
+    id?: number;
+    username?: string;
+    password?: string;
+    email?: string;
+    role?: RoleModel;
+    context?: ContextModel;
 }
 
 export interface AuthCredentials {
-    token:string;
-    identity:UserModel;
+    token: string;
+    identity: UserModel;
 }
 
 export interface CookieIdentity {
-    token?:string;
-    dx?:number;
-    dlg?:number;
+    token?: string;
+    dx?: number;
+    dlg?: number;
 }
 
 export interface CrudFilter {
     proprety: string;
     value: string;
-  }
+}
 
 

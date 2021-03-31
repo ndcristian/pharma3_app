@@ -2,7 +2,7 @@
     <!-- Input data -->
     <div class="row input-data">
         <!-- select/input product -->
-        <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 ">
+        <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 " (keyup.enter)="onSelectProductKeyPress()">
             <ng-template #productTemplate let-r="result" let-t="term">
                 <ngb-highlight [result]="r.name" [term]="t" (click)="onSelectProduct(r)"></ngb-highlight>
             </ng-template>
@@ -10,10 +10,10 @@
                 [ngbTypeahead]="searchProduct" (focus)="focus$.next($any($event).target.value)"
                 [resultTemplate]="productTemplate" [inputFormatter]="formatterProduct" placeholder="Produs..."
                 #productInput="ngbTypeahead" (click)="click$.next($any($event).target.value)"
-                (click)="$event.target.select()" (change)="onSelectProductTest()" />
+                (click)="$event.target.select()"  />
         </div>
 
-        <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 ">
+        <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 " (keyup.enter)="onSelectProducerKeyPress()">
             <!-- select/input producer -->
             <ng-template #producerTemplate let-r="result" let-t="term">
                 <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
@@ -107,7 +107,7 @@
                     <tr *ngFor="let row of necessaryList; let i = index" (click)="onSelectRow(row)" [ngClass]="{'odd':i%2==0}">
 
                         <td class=" row-details allignCenter">
-                            <span class="material-icons saveIcon" title="Save">
+                            <span class="material-icons saveIcon" title="Save" (click)="showDetails(row)">
                                 dehaze
                             </span>
                         </td>
@@ -207,19 +207,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let row of [1,2,3,4,5,6,7,8,9,8,7,6,5,4,3,2,3,3]">
+                        <tr *ngFor="let necessaryDetails of necessaryDetailsList">
 
                             <td class="tabelRowLeft row-pl">
-                                Punct de lucru {{row}}
+                                {{necessaryDetails.context}}
                             </td>
                             <td class="tabelRowRight row-qt">
-                                3
+                                {{necessaryDetails.necessary}}
                             </td>
-                            <td class="tabelRowRight row-date">
-                                28-01-2021
+                            <td class="allignCenter row-date">
+                                {{necessaryDetails.modified | date:'dd-LL-yyyy/hh:mm'}}
                             </td>
                             <td class="tabelRowLeft row-obs">
-                                asdfasdfasdfadsfd asdf
+                                {{necessaryDetails.obs}}
                             </td>
                         </tr>
                     </tbody>

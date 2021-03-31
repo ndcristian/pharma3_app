@@ -3,12 +3,13 @@ import { Observable, Subject, merge, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { CrudService } from '../../services/crud.service';
-import { ContextModel, DepositModel, ProducerModel, ProductModel, SupplierModel, NecessaryModel, OfferModel } from 'src/app/models/app.model';
+import { ContextModel, DepositModel, ProducerModel, ProductModel, SupplierModel, NecessaryModel, OfferModel, HistoryModel } from 'src/app/models/app.model';
 import { ROUTES_MODEL_CONFIG } from '../../models/config.models';
 import { AppStateService } from '../../services/app-state.service';
 import { AppStateModel } from 'src/app/models/state.model';
 import { UPDATE_CONTEXT, UPDATE_PRODUCTS_PRODUCERS, UPDATE_SUPPLIERS } from '../../models/action.model';
 import { CrudFilter } from '../../models/app.model';
+import { isBreakOrContinueStatement } from 'typescript';
 
 
 @Component({
@@ -41,10 +42,16 @@ export class ComandaComponent implements OnInit, OnDestroy, AfterViewInit {
   posSubscripton: Subscription;
   supplierSubscription: Subscription;
   necessarySubscription: Subscription;
+  historyDetailsSubscription: Subscription;
+  necessaryDetailsSubscription: Subscription;
+  offerDetailsSubscription: Subscription;
 
   necessaryList: DepositModel[];
   supplierList: SupplierModel[];
   contextList: ContextModel[];
+  necessaryDetailsList: NecessaryModel[];
+  offerDetailsList: OfferModel[];
+  historyDetailsList: HistoryModel[];
 
   currentAppstate: AppStateModel;
   filters: { product?: ProducerModel, producer?: ProducerModel } = {};
@@ -129,6 +136,26 @@ export class ComandaComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.productSubscription) {
       this.productSubscription.unsubscribe();
     }
+    if (this.supplierSubscription) {
+      this.supplierSubscription.unsubscribe();
+    }
+    if (this.posSubscripton) {
+      this.posSubscripton.unsubscribe();
+    }
+    if (this.necessarySubscription) {
+      this.necessarySubscription.unsubscribe();
+    }
+    if (this.necessaryDetailsSubscription) {
+      this.necessaryDetailsSubscription.unsubscribe();
+    }
+    if (this.historyDetailsSubscription) {
+      this.historyDetailsSubscription.unsubscribe();
+    }
+    if (this.offerDetailsSubscription) {
+      this.offerDetailsSubscription.unsubscribe();
+    }
+
+
   }
 
   ngAfterViewInit() {
@@ -143,24 +170,34 @@ export class ComandaComponent implements OnInit, OnDestroy, AfterViewInit {
     /* With every click on row this variable is reset an we lose all the data entered */
     if (!this.necessaryToSave.id || this.necessaryToSave.id != this.selectedNecessaryRow.id) {
       this.necessaryToSave = item;
-      console.log("necessaryToSave:", this.necessaryToSave)
+      console.log("onSelectRow:", this.necessaryToSave);
     }
 
   }
 
-  onSelectTab(selectedTab: string) {
-    console.log(selectedTab)
-    this.activeTab = selectedTab;
+  onSelectProduct(product: ProductModel) {
+    this.filters.product = product;
+    this.producer = product.producer;
+    console.log("necessaryToSave on select", this.necessaryToSave);
   }
 
-  /* Filter when select a product */
-  onSelectProductTest() {
-    console.log("********onSelectProductTest::::", this.product);
+  onSelectProductKeyPress() {
+    this.filters.product = this.product;
+    this.producer = this.product.producer;
+    console.log("necessaryToSave on select", this.necessaryToSave);
   }
 
-  /* Filter when select a product */
-  onSelectProduct(item: ProductModel) {
-    console.log("onSelectProduct::::", item);
+  onSelectProducer(producer: ProducerModel) {
+    this.filters.producer = producer;
+    delete this.filters.product;
+    this.product = "";
+    console.log(producer);
+  }
+
+  onSelectProducerKeyPress() {
+    this.filters.producer = this.producer;
+    this.product = "";
+    console.log("necessaryToSave on select", this.necessaryToSave);
   }
 
   /* Filter when select a product */
@@ -190,8 +227,6 @@ export class ComandaComponent implements OnInit, OnDestroy, AfterViewInit {
     })
   }
 
-  /* Filter when select a producer */
-  onSelectProducer() { }
 
   onChangePret(value: number) {
 
@@ -261,7 +296,7 @@ export class ComandaComponent implements OnInit, OnDestroy, AfterViewInit {
         this.necessaryList[index].rest -= this.necessaryToSave.newQtyOrdered;
 
         if (this.selectedNecessaryRow.rest <= 0) {
-          
+
           this.necessaryList.splice(index, 1);
         }
       }
@@ -296,6 +331,59 @@ export class ComandaComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
   }
+
+  showDetails(row: HistoryModel) {
+    console.log("showDetails", row);
+
+    switch (this.activeTab) {
+      case 'pl':
+        this.refreshNecessaryDetails(row.product.id);
+        break;
+      case 'comercial':
+        this.refreshOfferDetails(row.product.id);
+        break;
+      case 'history':
+        this.refreshHistoryDetails(row.product.id);
+        break;
+    }
+
+  }
+
+  onSelectTab(selectedTab: string) {
+    console.log(selectedTab);
+    this.activeTab = selectedTab;
+    switch (this.activeTab) {
+      case 'pl':
+        this.refreshNecessaryDetails(this.selectedNecessaryRow.product.id);
+        break;
+      case 'comercial':
+        this.refreshOfferDetails(this.selectedNecessaryRow.product.id);
+        break;
+      case 'history':
+        this.refreshHistoryDetails(this.selectedNecessaryRow.product.id);
+        break;
+    }
+
+  }
+
+  /* Refesh  necessary details when details button is pressed */
+  refreshNecessaryDetails(id: number) {
+    let crudFilter: CrudFilter[] = [{ proprety: "product", value: id.toString() }];
+    this.necessaryDetailsSubscription = this.crudService.getBy(ROUTES_MODEL_CONFIG.necessariesGetByProduct, crudFilter).subscribe((items: Array<NecessaryModel>) => {
+      console.log("refreshNecessaryDetails", items);
+      this.necessaryDetailsList = items;
+    })
+  }
+
+  /* Refesh offers details when details button is pressed */
+  refreshOfferDetails(id: number) {
+    let crudFilter: CrudFilter[] = [{ proprety: "id", value: id.toString() }];
+  }
+  /* Refesh history details when details button is pressed */
+  refreshHistoryDetails(id: number) {
+    let crudFilter: CrudFilter[] = [{ proprety: "id", value: id.toString() }];
+  }
+
 
   filterData() {
     console.log(this.filters);

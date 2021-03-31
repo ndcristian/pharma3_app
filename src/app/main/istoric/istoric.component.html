@@ -2,7 +2,7 @@
   <!-- Input data -->
   <div class="row input-data">
     <!-- select/input product -->
-    <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 ">
+    <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 " (keyup.enter)="onSelectProductKeyPress()">
         <ng-template #productTemplate let-r="result" let-t="term">
             <ngb-highlight [result]="r.name" [term]="t" (click)="onSelectProduct(r)"></ngb-highlight>
         </ng-template>
@@ -13,7 +13,7 @@
             (click)="$event.target.select()"  />
     </div>
 
-    <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 ">
+    <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 " (keyup.enter)="onSelectProducerKeyPress()">
         <!-- select/input producer -->
         <ng-template #producerTemplate let-r="result" let-t="term">
             <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
@@ -74,7 +74,7 @@
             <table class="">
                 <thead>
                     <tr>
-                        <th class="row-producer">furnizor
+                        <th class="row-supplier">Furnizor
                             <span class="material-icons sortIcon ">
                                 south
                             </span>
@@ -100,29 +100,42 @@
                             </span>
                         </th>
                         <th class="row-qt">Cantitate</th>
+                        <th class="row-qt">Pret</th>
+                        <th class="row-qt">Discount</th>
+                        <th class="row-qt">PretFinal</th>
                         <th class="row-obs">Observatii</th>
                         <th class="row-actions">Actiuni</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let row of [1,2,3,4,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5]">
+                    <tr *ngFor="let row of historyList">
 
-                        <td class=" row-producer tabelRowLeft">
-                            Furnizor {{row}}
+                        <td class=" row-supplier tabelRowLeft">
+                             {{row.supplier.name}}
                         </td>
                         <td class="row-product tabelRowLeft">
-                            Produs {{row}}
+                             {{row.product.name}}
                         </td>
                         <td class=" row-producer tabelRowLeft">
-                           Producator
+                            {{row.product.producer.name}}
                         </td>
                         <td class="row-qt allignRight">
-                            <input class="form-control form-control-sm allignRight" type="text" placeholder="123">
+                            {{row.ordered}}
+                        </td>
+                        <td class="row-qt allignRight">
+                            {{row.price}}
+                        </td>
+                        <td class="row-qt allignRight">
+                            {{row.discount}}
+                        </td>
+                        <td class="row-qt allignRight">
+                            {{row.final_price}}
                         </td>
                         <td class="row-obs tabelRowLeft">
-                            <input class="form-control form-control-sm" type="text" placeholder="Observatii">
+                            {{row.obs}}
+
                         </td>
-                        <td class=" row-actions allignRight">
+                        <td class=" row-actions allignCenter">
                             <span class="material-icons saveIcon" title="Save">
                                 save
                             </span>

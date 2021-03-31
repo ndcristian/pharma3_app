@@ -109,6 +109,12 @@ export class NecesarComponent implements OnInit, OnDestroy {
     console.log(producer);
   }
 
+  onSelectProducerKeyPress(){
+    this.filters.producer = this.producer;
+    this.product = "";
+    console.log("necessaryToSave on select", this.necessaryToSave);
+  }
+
   onSelectRow(necessary: NecessaryModel) {
     console.log("onSelectRow", necessary);
     this.selectedNecessary = { ...necessary };

@@ -2,13 +2,14 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewChildren, Afte
 import { Observable, Subject, merge, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
-import { ContextModel, DepositModel, ProducerModel, ProductModel, SupplierModel, NecessaryModel, OfferModel } from 'src/app/models/app.model';
+import { ContextModel, DepositModel, ProducerModel, ProductModel, SupplierModel, NecessaryModel, OfferModel, HistoryModel } from 'src/app/models/app.model';
 import { AppStateModel } from 'src/app/models/state.model';
 import { CrudService } from '../../services/crud.service';
 import { ROUTES_MODEL_CONFIG } from '../../models/config.models';
 import { AppStateService } from '../../services/app-state.service';
 import { UPDATE_CONTEXT, UPDATE_PRODUCTS_PRODUCERS, UPDATE_SUPPLIERS } from '../../models/action.model';
 import { CrudFilter } from '../../models/app.model';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-istoric',
@@ -40,7 +41,7 @@ export class IstoricComponent implements OnInit {
   supplierSubscription: Subscription;
   necessarySubscription: Subscription;
 
-  necessaryList: DepositModel[];
+  historyList: DepositModel[];
   supplierList: SupplierModel[];
   contextList: ContextModel[];
 
@@ -68,12 +69,19 @@ export class IstoricComponent implements OnInit {
     To avoid this, make a subscription to update the appState
     */
     if (this.currentAppstate) {
- 
+
       this.productsList = this.currentAppstate.products;
       this.producersList = this.currentAppstate.producers;
-      this.contextList = this.currentAppstate.context.filter((c: ContextModel) => {
-        return c.id == this.currentAppstate.user.context.id || c.central;
-      });
+
+      /* If role admin or depozit , show all POS  */
+      if (this.appStateService.getAppState().user.role.level <= 20) {
+        this.contextList = this.currentAppstate.context;
+      } else {
+        this.contextList = this.currentAppstate.context.filter((c: ContextModel) => {
+          return c.id == this.currentAppstate.user.context.id || c.central;
+        });
+      }
+
       this.supplierList = this.currentAppstate.supplier;
 
       /* Set selectedSupplier as default */
@@ -122,6 +130,30 @@ export class IstoricComponent implements OnInit {
   }
 
 
+  onSelectProduct(product: ProductModel) {
+    this.filters.product = product;
+    this.producer = product.producer;
+  }
+
+  onSelectProductKeyPress() {
+    this.filters.product = this.product;
+    this.producer = this.product.producer;
+  }
+
+  onSelectProducer(producer: ProducerModel) {
+    this.filters.producer = producer;
+    delete this.filters.product;
+    this.product = "";
+    console.log(producer);
+  }
+
+  onSelectProducerKeyPress() {
+    this.filters.producer = this.producer;
+    delete this.filters.product;
+    this.product = "";
+    console.log(this.producer);
+  }
+
   /* Filter when select a product */
   onSelectContext(item: number) {
 
@@ -150,15 +182,15 @@ export class IstoricComponent implements OnInit {
   }
 
   filterData() {
-    console.log(this.filters);
+    console.log("filters to sort::::::",this.filters);
     if (this.filters.product) {
-      this.necessaryList = this.necessaryList.filter((n: DepositModel) => {
+      this.historyList = this.historyList.filter((n: HistoryModel) => {
         return n.product.id == this.filters.product.id;
       })
     }
 
     if (this.filters.producer) {
-      this.necessaryList = this.necessaryList.filter((n: DepositModel) => {
+      this.historyList = this.historyList.filter((n: DepositModel) => {
         return n.product.producer.id == this.filters.producer.id;
       })
     }
@@ -172,19 +204,17 @@ export class IstoricComponent implements OnInit {
     /* Reset filters */
     this.filters = {};
     /* Get necessary from diferent sources dependin on isCentralizat */
-    if (this.isCentralizat) {
+    let crudFilter: CrudFilter[] = [
+      { proprety: "from", value: this.appStateService.getAppState().before30Date.getTime().toString() },
+      { proprety: "to", value: moment().toDate().getTime().toString() },
+      /* in deposit all records have 0 at context */
+      { proprety: "context", value: this.isCentralizat ? '0' : this.selectedContext.id.toString() }
+    ];
+    console.log(this.appStateService.getAppState().before30Date, this.appStateService.getAppState().currentDate);
+    this.necessarySubscription = this.crudService.getBy(ROUTES_MODEL_CONFIG.histories, crudFilter).subscribe((items: Array<HistoryModel>) => {
+      this.historyList = items;
+    });
 
-      this.necessarySubscription = this.crudService.get(ROUTES_MODEL_CONFIG.depositGetAll).subscribe((items: Array<DepositModel>) => {
-        this.necessaryList = items;
-      });
-
-    } else {
-      let crudFilter: CrudFilter[] = [{ proprety: "context", value: this.selectedContext.id.toString() }];
-
-      this.necessarySubscription = this.crudService.getBy(ROUTES_MODEL_CONFIG.necessariesGetByContext, crudFilter).subscribe((items: Array<DepositModel>) => {
-        this.necessaryList = items;
-      });
-    }
 
   }
 

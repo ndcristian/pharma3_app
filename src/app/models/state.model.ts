@@ -9,6 +9,7 @@ export interface AppStateModel {
     supplier?:SupplierModel[];
     title?:"Etix v.3";
     currentDate?: Date;
+    before30Date?:Date;
     action?:string;
     
 }

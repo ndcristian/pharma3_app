@@ -4,6 +4,7 @@ export const ROUTES_MODEL_CONFIG = {
     necessaries: "necessaries",
     necessariesPutOrder:"necessaries/order",
     necessariesGetByContext: "necessaries/context",
+    necessariesGetByProduct: "necessaries/product",
     depositGetAll: "deposit",
     depositGetFromTo: "deposit/date",
     deposit:"deposit",
@@ -15,7 +16,8 @@ export const ROUTES_MODEL_CONFIG = {
     contextes:"contextes",
     users:"users",
     roles:"roles",
-    suppliers:"suppliers"
+    suppliers:"suppliers",
+    histories:"histories/date"
 
 } 
 

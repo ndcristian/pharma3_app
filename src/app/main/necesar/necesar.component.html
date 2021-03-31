@@ -14,7 +14,7 @@
                 #productInput="ngbTypeahead" />
         </div>
 
-        <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 ">
+        <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2" (keyup.enter)="onSelectProducerKeyPress()">
             <!-- select/input producer -->
             <ng-template #producerTemplate let-r="result" let-t="term">
                 <ngb-highlight [result]="r.name" [term]="t" (click)="onSelectProducer(r)"></ngb-highlight>

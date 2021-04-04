@@ -23,8 +23,8 @@ export class IstoricComponent implements OnInit {
 
   @ViewChild('productInput', { static: true }) productInput: NgbTypeahead;
   @ViewChild('producerInput', { static: true }) producerInput: NgbTypeahead;
-  @ViewChildren('orderDiscount') discountInputElements: QueryList<ElementRef>;
-  @ViewChildren('orderPrice') priceInputElements: QueryList<ElementRef>;
+  // @ViewChildren('orderDiscount') discountInputElements: QueryList<ElementRef>;
+  // @ViewChildren('orderPrice') priceInputElements: QueryList<ElementRef>;
 
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
@@ -172,17 +172,19 @@ export class IstoricComponent implements OnInit {
       return c.id == item;
     })[0];
 
+    this.refreshNcessaryData();
+
     /* Reset all value from preview supplier */
-    this.discountInputElements.forEach((e) => {
-      e.nativeElement.value = '';
-    })
-    this.priceInputElements.forEach((e) => {
-      e.nativeElement.value = '';
-    })
+    // this.discountInputElements.forEach((e) => {
+    //   e.nativeElement.value = '';
+    // })
+    // this.priceInputElements.forEach((e) => {
+    //   e.nativeElement.value = '';
+    // })
   }
 
   filterData() {
-    console.log("filters to sort::::::",this.filters);
+    console.log("filters to sort::::::", this.filters);
     if (this.filters.product) {
       this.historyList = this.historyList.filter((n: HistoryModel) => {
         return n.product.id == this.filters.product.id;
@@ -190,7 +192,7 @@ export class IstoricComponent implements OnInit {
     }
 
     if (this.filters.producer) {
-      this.historyList = this.historyList.filter((n: DepositModel) => {
+      this.historyList = this.historyList.filter((n: HistoryModel) => {
         return n.product.producer.id == this.filters.producer.id;
       })
     }
@@ -210,7 +212,13 @@ export class IstoricComponent implements OnInit {
       /* in deposit all records have 0 at context */
       { proprety: "context", value: this.isCentralizat ? '0' : this.selectedContext.id.toString() }
     ];
-    console.log(this.appStateService.getAppState().before30Date, this.appStateService.getAppState().currentDate);
+    if (!this.selectedSupplier.implicit) {
+      crudFilter.push(
+        { proprety: "supplier", value: this.selectedSupplier.id.toString() }
+      );
+    }
+    
+
     this.necessarySubscription = this.crudService.getBy(ROUTES_MODEL_CONFIG.histories, crudFilter).subscribe((items: Array<HistoryModel>) => {
       this.historyList = items;
     });

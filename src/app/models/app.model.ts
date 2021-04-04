@@ -57,6 +57,8 @@ export interface NecessaryModel {
     modified?: Date;
     creator?: number;
     modifier?: number;
+    context?:number;
+    context_name?:string;
 
 }
 
@@ -84,7 +86,7 @@ export interface DepositModel {
 
 export interface HistoryModel {
     id?: number;
-    product?: ProducerModel;
+    product?: ProductModel;
     supplier?: SupplierModel;
     necessary?: number;
     ordered?: number;
@@ -104,7 +106,7 @@ export interface OfferModel {
 
     id?: number;
     product?: number;
-    supplier?: number;
+    supplier?: SupplierModel;
     discount?: number;
     price?: number;
     final_price?: number;

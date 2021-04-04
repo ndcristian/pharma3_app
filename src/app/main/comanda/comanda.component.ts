@@ -273,7 +273,7 @@ export class ComandaComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   saveOffer() {
-    this.offerToSave.supplier = this.selectedSupplier.id;
+    this.offerToSave.supplier = this.selectedSupplier;
     if ((this.offerToSave.price && this.offerToSave.price > 0) || (this.offerToSave.discount && this.offerToSave.discount > 0)) {
       console.log("offerToSave", this.offerToSave);
       this.crudService.post(ROUTES_MODEL_CONFIG.offers, this.offerToSave).subscribe((id: number) => {
@@ -337,13 +337,17 @@ export class ComandaComponent implements OnInit, OnDestroy, AfterViewInit {
 
     switch (this.activeTab) {
       case 'pl':
-        this.refreshNecessaryDetails(row.product.id);
+        /* in DB necessary we look for id_deposit . in centralizat mode this id is row.id */
+        let idForDetailsPl = this.isCentralizat ? row.id : row.deposit;
+        this.refreshNecessaryDetails(idForDetailsPl);
         break;
       case 'comercial':
-        this.refreshOfferDetails(row.product.id);
+        let idForDetailsComercial = row.product.id;
+        this.refreshOfferDetails(idForDetailsComercial);
         break;
       case 'history':
-        this.refreshHistoryDetails(row.product.id);
+        let idForDetailsHistory = row.product.id;
+        this.refreshHistoryDetails(idForDetailsHistory);
         break;
     }
 
@@ -354,13 +358,20 @@ export class ComandaComponent implements OnInit, OnDestroy, AfterViewInit {
     this.activeTab = selectedTab;
     switch (this.activeTab) {
       case 'pl':
-        this.refreshNecessaryDetails(this.selectedNecessaryRow.product.id);
+        if (this.selectedNecessaryRow) {
+          let idForDetailsPl = this.isCentralizat ? this.selectedNecessaryRow.id : this.selectedNecessaryRow.deposit;
+          this.refreshNecessaryDetails(idForDetailsPl);
+        }
         break;
       case 'comercial':
-        this.refreshOfferDetails(this.selectedNecessaryRow.product.id);
+        if (this.selectedNecessaryRow) {
+          this.refreshOfferDetails(this.selectedNecessaryRow.product.id);
+        }
         break;
       case 'history':
-        this.refreshHistoryDetails(this.selectedNecessaryRow.product.id);
+        if (this.selectedNecessaryRow) {
+          this.refreshHistoryDetails(this.selectedNecessaryRow.product.id);
+        }
         break;
     }
 
@@ -368,20 +379,35 @@ export class ComandaComponent implements OnInit, OnDestroy, AfterViewInit {
 
   /* Refesh  necessary details when details button is pressed */
   refreshNecessaryDetails(id: number) {
-    let crudFilter: CrudFilter[] = [{ proprety: "product", value: id.toString() }];
+    let crudFilter: CrudFilter[] = [{ proprety: "deposit", value: id.toString() }];
     this.necessaryDetailsSubscription = this.crudService.getBy(ROUTES_MODEL_CONFIG.necessariesGetByProduct, crudFilter).subscribe((items: Array<NecessaryModel>) => {
-      console.log("refreshNecessaryDetails", items);
+      /* Add name to context , replace id  with name */
+      items.forEach((i) => {
+        let v1: ContextModel[] = this.contextList.filter((c: ContextModel) => { return c.id == i.context });
+        i.context_name = v1.length > 0 ? v1[0].name : "";
+      });
       this.necessaryDetailsList = items;
     })
   }
 
   /* Refesh offers details when details button is pressed */
   refreshOfferDetails(id: number) {
-    let crudFilter: CrudFilter[] = [{ proprety: "id", value: id.toString() }];
+    let crudFilter: CrudFilter[] = [{ proprety: "product", value: id.toString() }];
+    this.offerDetailsSubscription = this.crudService.getBy(ROUTES_MODEL_CONFIG.offersGetByProduct, crudFilter).subscribe((items: Array<OfferModel>) => {
+      console.log("Oferte:::", items)
+
+      this.offerDetailsList = items;
+    })
+
   }
   /* Refesh history details when details button is pressed */
   refreshHistoryDetails(id: number) {
-    let crudFilter: CrudFilter[] = [{ proprety: "id", value: id.toString() }];
+    let crudFilter: CrudFilter[] = [{ proprety: "product", value: id.toString() }];
+    this.offerDetailsSubscription = this.crudService.getBy(ROUTES_MODEL_CONFIG.historiesGetByProduct, crudFilter).subscribe((items: Array<HistoryModel>) => {
+      console.log("History:::", items)
+
+      this.historyDetailsList = items;
+    })
   }
 
 

@@ -1,64 +1,69 @@
 <div class="view-comanda">
-  <!-- Input data -->
-  <div class="row input-data">
-    <!-- select/input product -->
-    <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 " (keyup.enter)="onSelectProductKeyPress()">
-        <ng-template #productTemplate let-r="result" let-t="term">
-            <ngb-highlight [result]="r.name" [term]="t" (click)="onSelectProduct(r)"></ngb-highlight>
-        </ng-template>
-        <input id="typeahead-necesar-products" type="text" class="form-control" [(ngModel)]="product"
-            [ngbTypeahead]="searchProduct" (focus)="focus$.next($any($event).target.value)"
-            [resultTemplate]="productTemplate" [inputFormatter]="formatterProduct" placeholder="Produs..."
-            #productInput="ngbTypeahead" (click)="click$.next($any($event).target.value)"
-            (click)="$event.target.select()"  />
-    </div>
+    <!-- Input data -->
+    <div class="row input-data">
+        <!-- select/input product -->
+        <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 " (keyup.enter)="onSelectProductKeyPress()">
+            <ng-template #productTemplate let-r="result" let-t="term">
+                <div (click)="onSelectProduct(r)">
+                    <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
+                </div>
+            </ng-template>
+            <input id="typeahead-necesar-products" type="text" class="form-control" [(ngModel)]="product"
+                [ngbTypeahead]="searchProduct" (focus)="focus$.next($any($event).target.value)"
+                [resultTemplate]="productTemplate" [inputFormatter]="formatterProduct" placeholder="Produs..."
+                #productInput="ngbTypeahead" (click)="click$.next($any($event).target.value)"
+                (click)="$event.target.select()" />
+        </div>
 
-    <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 " (keyup.enter)="onSelectProducerKeyPress()">
-        <!-- select/input producer -->
-        <ng-template #producerTemplate let-r="result" let-t="term">
-            <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
-        </ng-template>
-        <input id="typeahead-necesar-producers" type="text" class="form-control" [(ngModel)]="producer"
-            [ngbTypeahead]="searchProducer" (focus)="focus2$.next($any($event).target.value)"
-            [resultTemplate]="producerTemplate" [inputFormatter]="formatterProducer" placeholder="Producator..."
-            (click)="click2$.next($any($event).target.value)" #producerInput="ngbTypeahead" />
-    </div>
-    <!-- Context Selection -->
-    <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2  d-flex justify-content-end">
-        <select class="custom-select mr-sm-2" id="commandContext" #comandaContext
-            (click)="onSelectContext(comandaContext.value)">
-            <option *ngFor="let item of contextList" value={{item.id}} [selected]="item.id==selectedContext.id">
-                {{item.name}}
-            </option>
-        </select>
-    </div>
-    <!-- Supplier Selection -->
-    <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2  d-flex justify-content-end">
-        <select class="custom-select mr-sm-2" id="commandSupplier" #commandSupplier 
-        (click)="onSelectSupplier(commandSupplier.value)">
-            <option *ngFor="let item of supplierList" value={{item.id}} [selected]="item.implicit">
-                {{item.name}}
-            </option>
-        </select>
-    </div>
-    <!-- Filter data -->
-    <div class=" col d-flex justify-content-end">
-        <button type="button" class="btn btn-success" (click)="filterData()">
-            <span class="material-icons addIcon" title="Filter">
-                filter_alt
-            </span>
-        </button>
-    </div>
-    <!-- Refresh Button -->
-    <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1  d-flex justify-content-end">
-        <button type="button" class="btn btn-success" (click)="refreshNcessaryData()">
-            <span class="material-icons addIcon" title="Refresh">
-                cached
-            </span>
-        </button>
-    </div>
+        <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 " (keyup.enter)="onSelectProducerKeyPress()">
+            <!-- select/input producer -->
+            <ng-template #producerTemplate let-r="result" let-t="term">
+                <div (click)="onSelectProducer(r)">
+                    <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
+                </div>
 
-</div>
+            </ng-template>
+            <input id="typeahead-necesar-producers" type="text" class="form-control" [(ngModel)]="producer"
+                [ngbTypeahead]="searchProducer" (focus)="focus2$.next($any($event).target.value)"
+                [resultTemplate]="producerTemplate" [inputFormatter]="formatterProducer" placeholder="Producator..."
+                (click)="click2$.next($any($event).target.value)" #producerInput="ngbTypeahead" />
+        </div>
+        <!-- Context Selection -->
+        <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2  d-flex justify-content-end">
+            <select class="custom-select mr-sm-2" id="commandContext" #comandaContext
+                (click)="onSelectContext(comandaContext.value)">
+                <option *ngFor="let item of contextList" value={{item.id}} [selected]="item.id==selectedContext.id">
+                    {{item.name}}
+                </option>
+            </select>
+        </div>
+        <!-- Supplier Selection -->
+        <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2  d-flex justify-content-end">
+            <select class="custom-select mr-sm-2" id="commandSupplier" #commandSupplier
+                (click)="onSelectSupplier(commandSupplier.value)">
+                <option *ngFor="let item of supplierList" value={{item.id}} [selected]="item.implicit">
+                    {{item.name}}
+                </option>
+            </select>
+        </div>
+        <!-- Filter data -->
+        <div class=" col d-flex justify-content-end">
+            <button type="button" class="btn btn-success" (click)="filterData()">
+                <span class="material-icons addIcon" title="Filter">
+                    filter_alt
+                </span>
+            </button>
+        </div>
+        <!-- Refresh Button -->
+        <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1  d-flex justify-content-end">
+            <button type="button" class="btn btn-success" (click)="refreshNcessaryData()">
+                <span class="material-icons addIcon" title="Refresh">
+                    cached
+                </span>
+            </button>
+        </div>
+
+    </div>
 
     <!-- Un artificial div that cover space above tabel. If not prezent this articifial div , when scroll in table
     a part of the row scrolled is visible above the table. this div cover that part
@@ -70,10 +75,11 @@
     <div class="row order-table">
 
         <div class=" ">
-            
+
             <table class="">
                 <thead>
                     <tr>
+                        <th class="row-date">Data</th>
                         <th class="row-supplier">Furnizor
                             <span class="material-icons sortIcon ">
                                 south
@@ -109,11 +115,14 @@
                 <tbody>
                     <tr *ngFor="let row of historyList">
 
+                        <td class=" row-date allignCenter">
+                            {{row.modified | date:'dd-LL-yyyy/hh:mm'}}
+                        </td>
                         <td class=" row-supplier tabelRowLeft">
-                             {{row.supplier.name}}
+                            {{row.supplier.name}}
                         </td>
                         <td class="row-product tabelRowLeft">
-                             {{row.product.name}}
+                            {{row.product.name}}
                         </td>
                         <td class=" row-producer tabelRowLeft">
                             {{row.product.producer.name}}
@@ -134,7 +143,7 @@
                             {{row.obs}}
 
                         </td>
-            
+
                     </tr>
                 </tbody>
             </table>

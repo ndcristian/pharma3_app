@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewChildren, AfterViewInit, QueryList } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewChildren, AfterViewInit, QueryList, AfterViewChecked } from '@angular/core';
 import { Observable, Subject, merge, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
@@ -23,9 +23,7 @@ export class IstoricComponent implements OnInit {
 
   @ViewChild('productInput', { static: true }) productInput: NgbTypeahead;
   @ViewChild('producerInput', { static: true }) producerInput: NgbTypeahead;
-  // @ViewChildren('orderDiscount') discountInputElements: QueryList<ElementRef>;
-  // @ViewChildren('orderPrice') priceInputElements: QueryList<ElementRef>;
-
+  
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
 
@@ -124,13 +122,13 @@ export class IstoricComponent implements OnInit {
       console.log("ComandaComponent state after subscriptions==", this.appStateService.getAppState());
 
     });
-
+    
     /* Get/update necessary data */
     this.refreshNcessaryData();
   }
 
 
-  onSelectProduct(product: ProductModel) {
+  onSelectProduct(product?: ProductModel) {
     this.filters.product = product;
     this.producer = product.producer;
   }
@@ -140,7 +138,7 @@ export class IstoricComponent implements OnInit {
     this.producer = this.product.producer;
   }
 
-  onSelectProducer(producer: ProducerModel) {
+  onSelectProducer(producer?: ProducerModel) {
     this.filters.producer = producer;
     delete this.filters.product;
     this.product = "";
@@ -152,6 +150,20 @@ export class IstoricComponent implements OnInit {
     delete this.filters.product;
     this.product = "";
     console.log(this.producer);
+  }
+
+  filterData() {
+    if (this.filters.product) {
+      this.historyList = this.historyList.filter((n: HistoryModel) => {
+        return n.product.id == this.filters.product.id;
+      })
+    }
+
+    if (this.filters.producer) {
+      this.historyList = this.historyList.filter((n: HistoryModel) => {
+        return n.product.producer.id == this.filters.producer.id;
+      })
+    }
   }
 
   /* Filter when select a product */
@@ -174,30 +186,7 @@ export class IstoricComponent implements OnInit {
 
     this.refreshNcessaryData();
 
-    /* Reset all value from preview supplier */
-    // this.discountInputElements.forEach((e) => {
-    //   e.nativeElement.value = '';
-    // })
-    // this.priceInputElements.forEach((e) => {
-    //   e.nativeElement.value = '';
-    // })
   }
-
-  filterData() {
-    console.log("filters to sort::::::", this.filters);
-    if (this.filters.product) {
-      this.historyList = this.historyList.filter((n: HistoryModel) => {
-        return n.product.id == this.filters.product.id;
-      })
-    }
-
-    if (this.filters.producer) {
-      this.historyList = this.historyList.filter((n: HistoryModel) => {
-        return n.product.producer.id == this.filters.producer.id;
-      })
-    }
-  }
-
 
   refreshNcessaryData() {
     /* Reset fields */
@@ -217,7 +206,7 @@ export class IstoricComponent implements OnInit {
         { proprety: "supplier", value: this.selectedSupplier.id.toString() }
       );
     }
-    
+
 
     this.necessarySubscription = this.crudService.getBy(ROUTES_MODEL_CONFIG.histories, crudFilter).subscribe((items: Array<HistoryModel>) => {
       this.historyList = items;

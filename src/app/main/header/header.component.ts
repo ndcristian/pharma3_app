@@ -24,6 +24,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   title: string = TITLE;
   user: UserModel;
   userName: string = ".....";
+  pos:string="......"
 
   showMenuComanda: boolean = false;
   showMenuAdmin: boolean = false;
@@ -40,6 +41,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     console.log("------HeaderComponent OnInit");
 
     this.userName = this.appStateService.getAppState().isLogged ? this.appStateService.getAppState().user.name : "."
+    this.pos = this.appStateService.getAppState().isLogged ? this.appStateService.getAppState().user.context.name : "."
 
     this.showButtonLogin = !this.appStateService.getAppState().isLogged;
     this.showButtonLogout = this.appStateService.getAppState().isLogged;
@@ -50,6 +52,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         console.log("HeaderBar component onInit:subscribe UPDATE_USER", this.appStateService.getAppState());
         this.user = appState.user ? appState.user : { name: '.' };
         this.userName = this.user.name;
+        this.pos = this.user.context.name;
 
         /* Show/Hide menu and buttons  */
         this.showButtonLogin = !appState.isLogged;

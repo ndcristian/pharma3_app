@@ -17,7 +17,7 @@ import { isBreakOrContinueStatement } from 'typescript';
   templateUrl: './comanda.component.html',
   styleUrls: ['./comanda.component.scss']
 })
-export class ComandaComponent implements OnInit, OnDestroy, AfterViewInit {
+export class ComandaComponent implements OnInit, OnDestroy {
 
   public product: any;
   public producer: any;
@@ -73,8 +73,6 @@ export class ComandaComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit(): void {
 
-    console.log("ComandaComponent onInit");
-
     this.currentAppstate = this.appStateService.getAppState();
 
     /* If page refresh from CoandaComponent , appState will be undefined 
@@ -123,8 +121,6 @@ export class ComandaComponent implements OnInit, OnDestroy, AfterViewInit {
         return c.implicit == true;
       })[0];
 
-      console.log("ComandaComponent state after subscriptions==", this.appStateService.getAppState());
-
     });
 
     /* Get/update necessary data */
@@ -158,46 +154,52 @@ export class ComandaComponent implements OnInit, OnDestroy, AfterViewInit {
 
   }
 
-  ngAfterViewInit() {
-
-  }
 
   onSelectRow(item: DepositModel) {
-    // console.log("onSelectRow", item);
     this.supplierChanged = false;
     this.selectedNecessaryRow = item;
     this.offerToSave.product = item.product.id;
     /* With every click on row this variable is reset an we lose all the data entered */
     if (!this.necessaryToSave.id || this.necessaryToSave.id != this.selectedNecessaryRow.id) {
       this.necessaryToSave = item;
-      console.log("onSelectRow:", this.necessaryToSave);
     }
 
   }
 
   onSelectProduct(product: ProductModel) {
-    this.filters.product = product;
+        this.filters.product = product;;
     this.producer = product.producer;
-    console.log("necessaryToSave on select", this.necessaryToSave);
   }
 
   onSelectProductKeyPress() {
     this.filters.product = this.product;
     this.producer = this.product.producer;
-    console.log("necessaryToSave on select", this.necessaryToSave);
   }
 
   onSelectProducer(producer: ProducerModel) {
     this.filters.producer = producer;
     delete this.filters.product;
     this.product = "";
-    console.log(producer);
   }
 
   onSelectProducerKeyPress() {
     this.filters.producer = this.producer;
+    delete this.filters.product;
     this.product = "";
-    console.log("necessaryToSave on select", this.necessaryToSave);
+  }
+
+  filterData() {
+    if (this.filters.product) {
+      this.necessaryList = this.necessaryList.filter((n: DepositModel) => {
+        return n.product.id == this.filters.product.id;
+      })
+    }
+
+    if (this.filters.producer) {
+      this.necessaryList = this.necessaryList.filter((n: DepositModel) => {
+        return n.product.producer.id == this.filters.producer.id;
+      })
+    }
   }
 
   /* Filter when select a product */
@@ -212,7 +214,6 @@ export class ComandaComponent implements OnInit, OnDestroy, AfterViewInit {
 
   /* Filter when select a product */
   onSelectSupplier(item: SupplierModel) {
-    console.log(item)
     this.supplierChanged = true;
     this.selectedSupplier = this.supplierList.filter((c: ContextModel) => {
       return c.id == item;
@@ -263,7 +264,6 @@ export class ComandaComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onChangeOrderQty(value: number) {
     this.necessaryToSave.newQtyOrdered = +value;
-    console.log("necessaryToSave", this.necessaryToSave);
   }
 
   onChangeObs(value: string) {
@@ -275,38 +275,56 @@ export class ComandaComponent implements OnInit, OnDestroy, AfterViewInit {
   saveOffer() {
     this.offerToSave.supplier = this.selectedSupplier;
     if ((this.offerToSave.price && this.offerToSave.price > 0) || (this.offerToSave.discount && this.offerToSave.discount > 0)) {
-      console.log("offerToSave", this.offerToSave);
       this.crudService.post(ROUTES_MODEL_CONFIG.offers, this.offerToSave).subscribe((id: number) => {
       })
     }
   }
 
-  saveOrder(index: number) {
+  saveOrder(index: number, row: DepositModel) {
     this.necessaryToSave.supplier = this.selectedSupplier;
-    console.log("necessaryToSave", this.necessaryToSave, this.selectedContext);
     let routeToSendRequest = this.selectedContext.central ? ROUTES_MODEL_CONFIG.deposit : ROUTES_MODEL_CONFIG.necessariesPutOrder;
 
-    this.crudService.update(routeToSendRequest, this.necessaryToSave).subscribe((id: number) => {
-      console.log("idUpdated", id);
+    /* Check if row from saveBtn ==  necessaryToSave. Avoid select one row and pres save from other*/
+    if (row.id == this.necessaryToSave.id && this.necessaryToSave.newQtyOrdered >= 0) {
 
-      if (id && id > 0) {
-        /* Update odrered qty in tabel */
-        this.necessaryList[index].ordered += this.necessaryToSave.newQtyOrdered;
-        /* Update rest in tabel */
-        this.necessaryList[index].rest -= this.necessaryToSave.newQtyOrdered;
+      this.crudService.update(routeToSendRequest, this.necessaryToSave).subscribe((id: number) => {
 
-        if (this.selectedNecessaryRow.rest <= 0) {
+        if (id && id > 0) {
+          /* Update odrered qty in tabel */
+          this.necessaryList[index].ordered += this.necessaryToSave.newQtyOrdered;
+          /* Update rest in tabel */
+          this.necessaryList[index].rest -= this.necessaryToSave.newQtyOrdered;
 
-          this.necessaryList.splice(index, 1);
+          if (this.selectedNecessaryRow.rest <= 0) {
+
+            this.necessaryList.splice(index, 1);
+          }
         }
-      }
-    });
+      });
+
+    } else {
+      alert("Cantitatea zero. Introduceti cantitatea");
+    }
+
+  }
+
+  deleteOrder(index: number, row: DepositModel) {
+    let routeToSendRequest = this.selectedContext.central ? ROUTES_MODEL_CONFIG.deposit : ROUTES_MODEL_CONFIG.necessaries;
+
+    this.crudService.delete(routeToSendRequest, row.id).subscribe((idDeleted: number) => {
+      /* Remove row from tabel */
+      this.necessaryList.splice(index, 1);
+      /* Reset data from bottom tabels */
+      this.necessaryDetailsList = [];
+      this.offerDetailsList = [];
+      this.historyDetailsList = [];
+    })
+
   }
 
   resetButton() {
     this.product = "";
     this.producer = "";
-    console.log(this.currentAppstate);
   }
 
   refreshNcessaryData() {
@@ -320,20 +338,29 @@ export class ComandaComponent implements OnInit, OnDestroy, AfterViewInit {
 
       this.necessarySubscription = this.crudService.get(ROUTES_MODEL_CONFIG.depositGetAll).subscribe((items: Array<DepositModel>) => {
         this.necessaryList = items;
-      });
+      },
+        (error) => {
+          if (error.status == 401) {
+            alert("Sesiunea a expirat.")
+          }
+        });
 
     } else {
       let crudFilter: CrudFilter[] = [{ proprety: "context", value: this.selectedContext.id.toString() }];
 
       this.necessarySubscription = this.crudService.getBy(ROUTES_MODEL_CONFIG.necessariesGetByContext, crudFilter).subscribe((items: Array<DepositModel>) => {
         this.necessaryList = items;
-      });
+      },
+        (error) => {
+          if (error.status == 401) {
+            alert("Sesiunea a expirat.")
+          }
+        });
     }
 
   }
 
   showDetails(row: HistoryModel) {
-    console.log("showDetails", row);
 
     switch (this.activeTab) {
       case 'pl':
@@ -354,7 +381,6 @@ export class ComandaComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onSelectTab(selectedTab: string) {
-    console.log(selectedTab);
     this.activeTab = selectedTab;
     switch (this.activeTab) {
       case 'pl':
@@ -394,7 +420,6 @@ export class ComandaComponent implements OnInit, OnDestroy, AfterViewInit {
   refreshOfferDetails(id: number) {
     let crudFilter: CrudFilter[] = [{ proprety: "product", value: id.toString() }];
     this.offerDetailsSubscription = this.crudService.getBy(ROUTES_MODEL_CONFIG.offersGetByProduct, crudFilter).subscribe((items: Array<OfferModel>) => {
-      console.log("Oferte:::", items)
 
       this.offerDetailsList = items;
     })
@@ -404,26 +429,9 @@ export class ComandaComponent implements OnInit, OnDestroy, AfterViewInit {
   refreshHistoryDetails(id: number) {
     let crudFilter: CrudFilter[] = [{ proprety: "product", value: id.toString() }];
     this.offerDetailsSubscription = this.crudService.getBy(ROUTES_MODEL_CONFIG.historiesGetByProduct, crudFilter).subscribe((items: Array<HistoryModel>) => {
-      console.log("History:::", items)
 
       this.historyDetailsList = items;
     })
-  }
-
-
-  filterData() {
-    console.log(this.filters);
-    if (this.filters.product) {
-      this.necessaryList = this.necessaryList.filter((n: DepositModel) => {
-        return n.product.id == this.filters.product.id;
-      })
-    }
-
-    if (this.filters.producer) {
-      this.necessaryList = this.necessaryList.filter((n: DepositModel) => {
-        return n.product.producer.id == this.filters.producer.id;
-      })
-    }
   }
 
 

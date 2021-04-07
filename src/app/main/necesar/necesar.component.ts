@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ElementRef, ViewChildren, QueryList } from '@angular/core';
 import { Observable, Subject, merge, Subscription } from 'rxjs';
 import { NgForm } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
@@ -24,6 +24,9 @@ export class NecesarComponent implements OnInit, OnDestroy {
 
   @ViewChild('productInput', { static: true }) productInput: NgbTypeahead;
   @ViewChild('producerInput', { static: true }) producerInput: NgbTypeahead;
+  @ViewChild('qty', { static: true }) qtyInput: ElementRef;
+  @ViewChild('obs', { static: true }) obsInput: ElementRef;
+  // @ViewChildren('orderDiscount') qtyInput: QueryList<ElementRef>;
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
 
@@ -52,8 +55,6 @@ export class NecesarComponent implements OnInit, OnDestroy {
   constructor(private crudService: CrudService, private appStateService: AppStateService) { }
 
   ngOnInit(): void {
-
-    console.log("NecesarComponent onInit");
 
     this.currentAppstate = this.appStateService.getAppState();
 
@@ -93,116 +94,26 @@ export class NecesarComponent implements OnInit, OnDestroy {
   onSelectProduct(product: ProductModel) {
     this.filters.product = product;
     this.producer = product.producer;
-    console.log("necessaryToSave on select", this.necessaryToSave);
   }
 
   onSelectProductKeyPress() {
     this.filters.product = this.product;
     this.producer = this.product.producer;
-    console.log("necessaryToSave on select", this.necessaryToSave);
   }
 
   onSelectProducer(producer: ProducerModel) {
     this.filters.producer = producer;
     delete this.filters.product;
     this.product = "";
-    console.log(producer);
   }
 
-  onSelectProducerKeyPress(){
+  onSelectProducerKeyPress() {
     this.filters.producer = this.producer;
     this.product = "";
-    console.log("necessaryToSave on select", this.necessaryToSave);
-  }
-
-  onSelectRow(necessary: NecessaryModel) {
-    console.log("onSelectRow", necessary);
-    this.selectedNecessary = { ...necessary };
-  }
-
-  onChangeQty(value: number) {
-    this.selectedNecessary.necessary = value;
-    console.log("onChangeQty", this.selectedNecessary);
-  }
-
-  onChangeObs(value: string) {
-    this.selectedNecessary.obs = value;
-    console.log("omChangeObs", this.selectedNecessary);
-  }
-
-
-  addProduct(qty: number, obs: string) {
-    console.log("addProduct", qty, obs);
-    this.necessaryToSave.product = this.product;
-    this.necessaryToSave.necessary = qty;
-    this.necessaryToSave.obs = obs;
-
-    /* Send request only if product and qty exist */
-    if (this.necessaryToSave.product && this.necessaryToSave.necessary) {
-      this.crudService.post(ROUTES_MODEL_CONFIG.necessaries, this.necessaryToSave).subscribe((id: number) => {
-        /* Add new product at top first position in the array */
-        if (id < 0) {
-          alert("Produsul exista deja in necesar")
-        } else {
-          this.necessaryList = [this.necessaryToSave, ...this.necessaryList];
-        }
-
-      })
-    } else {
-      alert("Incomplet data");
-    }
-
-  }
-
-  /* Update row in necessary */
-  updateNecesary(necessary: NecessaryModel) {
-
-    console.log("updateNecesary", this.selectedNecessary);
-    /* Check if modified row is the same with save button clicked row 
-    Check if data was modified
-    */
-    if (
-      this.selectedNecessary.id == necessary.id &&
-      (this.selectedNecessary.necessary != necessary.necessary ||
-        this.selectedNecessary.obs != necessary.obs)
-    ) {
-      this.crudService.update(ROUTES_MODEL_CONFIG.necessaries, this.selectedNecessary).subscribe((id: number) => {
-        console.log("updatedId", id);
-      });
-    } else {
-      if (this.selectedNecessary.id != necessary.id) {
-        alert("Acest rand nu contine date modificate");
-        this.refreshNcessaryData();
-      }
-    }
-  }
-
-  deleteNecessary(id: number, index: number) {
-    console.log(id, index);
-    this.crudService.delete(ROUTES_MODEL_CONFIG.necessaries, id).subscribe((id: number) => {
-      if (id && id > 0) {
-        this.necessaryList.splice(index, 1);
-      }
-    })
-  }
-
-  refreshNcessaryData() {
-    /* Reset fields */
-    this.producer = "";
-    this.product = "";
-    /* Reset filters */
-    this.filters = {};
-    /* Get necessary */
-    let crudFilter: CrudFilter[] = [{ proprety: "context", value: "0" }]
-    this.necessarySubscription = this.crudService.getBy(ROUTES_MODEL_CONFIG.necessariesGetByContext, crudFilter).subscribe((items: Array<NecessaryModel>) => {
-
-      this.necessaryList = items;
-    })
   }
 
   filterData() {
 
-    console.log(this.filters);
     if (this.filters.product) {
       this.necessaryList = this.necessaryList.filter((n) => {
         return n.product.id == this.filters.product.id;
@@ -214,6 +125,106 @@ export class NecesarComponent implements OnInit, OnDestroy {
         return n.product.producer.id == this.filters.producer.id;
       })
     }
+  }
+
+
+
+  onSelectRow(necessary: NecessaryModel) {
+    this.selectedNecessary = { ...necessary };
+  }
+
+  onChangeQty(value: number) {
+    this.selectedNecessary.necessary = value;
+  }
+
+  onChangeObs(value: string) {
+    this.selectedNecessary.obs = value;
+  }
+
+
+  addProduct(qty: number, obs: string) {
+    this.necessaryToSave.product = this.product;
+    this.necessaryToSave.necessary = qty;
+    this.necessaryToSave.obs = obs;
+
+    /* Send request only if product and qty exist */
+    if (this.necessaryToSave.product && this.necessaryToSave.necessary) {
+      this.crudService.post(ROUTES_MODEL_CONFIG.necessaries, this.necessaryToSave).subscribe((id: number) => {
+        /* Add new product at top first position in the array */
+
+        if (id < 0) {
+          alert("Produsul exista deja in necesar")
+        } else {
+          this.necessaryToSave.id = id;
+          this.necessaryToSave.ordered = 0;
+          this.necessaryList.splice(0, 0, this.necessaryToSave);
+          this.resetinputFields();
+          // console.log(this.qtyInput.nativeElement.value);
+        }
+
+      })
+    } else {
+      alert("Incomplet data");
+    }
+
+  }
+
+  resetinputFields() {
+    this.necessaryToSave = {};
+    this.qtyInput.nativeElement.value = '';
+    this.obsInput.nativeElement.value = '';
+    this.producer = '';
+    this.product = '';
+    this.filters = {};
+  }
+
+  /* Update row in necessary */
+  updateNecesary(necessary: NecessaryModel) {
+
+    /* Check if modified row is the same with save button clicked row 
+    Check if data was modified
+    */
+    if (
+      this.selectedNecessary.id == necessary.id &&
+      (this.selectedNecessary.necessary != necessary.necessary ||
+        this.selectedNecessary.obs != necessary.obs)
+    ) {
+      this.crudService.update(ROUTES_MODEL_CONFIG.necessaries, this.selectedNecessary).subscribe((id: number) => {
+      });
+    } else {
+      if (this.selectedNecessary.id != necessary.id) {
+        alert("Acest rand nu contine date modificate");
+        this.refreshNcessaryData();
+      }
+    }
+  }
+
+  deleteNecessary(id: number, index: number) {
+    this.crudService.delete(ROUTES_MODEL_CONFIG.necessaries, id).subscribe((id: number) => {
+      if (id && id > 0) {
+        this.necessaryList.splice(index, 1);
+      }
+    })
+  }
+
+  refreshNcessaryData() {
+    /* Reset fields */
+    // this.producer = "";
+    // this.product = "";
+    /* Reset filters */
+    // this.filters = {};
+    this.resetinputFields();
+    /* Get necessary */
+    let crudFilter: CrudFilter[] = [{ proprety: "context", value: "0" }]
+    this.necessarySubscription = this.crudService.getBy(ROUTES_MODEL_CONFIG.necessariesGetByContext, crudFilter).subscribe((items: Array<NecessaryModel>) => {
+
+      this.necessaryList = items;
+    },
+      (error) => {
+        if (error.status == 401) {
+          alert("Sesiunea a expirat.");
+        }
+      })
   }
 
 

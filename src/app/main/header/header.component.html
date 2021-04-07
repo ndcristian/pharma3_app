@@ -20,7 +20,7 @@
         <div class="col d-flex flex-row-reverse">
             <button *ngIf="showButtonLogin" type="button" class="btn btn-success" (click)="login()">Login</button>
             <button *ngIf="showButtonLogout" type="button" class="btn btn-danger" (click)="logout()">Logout</button>
-            <div class="col d-flex align-items-center" role="button"> {{userName}} </div>
+            <div class="col d-flex align-items-center" role="button"> {{userName}} @{{pos}}</div>
         </div>
 
     </div>

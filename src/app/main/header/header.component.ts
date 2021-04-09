@@ -23,8 +23,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   title: string = TITLE;
   user: UserModel;
-  userName: string = ".....";
-  pos:string="......"
+  userName: string = "..";
+  pos: string = "..";
+  separator = "";
 
   showMenuComanda: boolean = false;
   showMenuAdmin: boolean = false;
@@ -40,19 +41,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     console.log("------HeaderComponent OnInit");
 
-    this.userName = this.appStateService.getAppState().isLogged ? this.appStateService.getAppState().user.name : "."
-    this.pos = this.appStateService.getAppState().isLogged ? this.appStateService.getAppState().user.context.name : "."
+    this.userName = this.appStateService.getAppState().isLogged ? this.appStateService.getAppState().user.name : "";
+    this.pos = this.appStateService.getAppState().isLogged ? this.appStateService.getAppState().user.context.name : "";
+    this.separator = this.appStateService.getAppState().isLogged ? "@" : ""
 
     this.showButtonLogin = !this.appStateService.getAppState().isLogged;
     this.showButtonLogout = this.appStateService.getAppState().isLogged;
 
-    this.activeSubscription= this.appStateService.appStateOnChange.subscribe((appState: AppStateModel) => {
+    this.activeSubscription = this.appStateService.appStateOnChange.subscribe((appState: AppStateModel) => {
 
       if (appState.action == UPDATE_USER) {
         console.log("HeaderBar component onInit:subscribe UPDATE_USER", this.appStateService.getAppState());
-        this.user = appState.user ? appState.user : { name: '.' };
+        this.user = appState.user ? appState.user : { name: '', context:{name:''} };
         this.userName = this.user.name;
         this.pos = this.user.context.name;
+        this.separator = appState.user ?  "@" : "";
 
         /* Show/Hide menu and buttons  */
         this.showButtonLogin = !appState.isLogged;
@@ -65,9 +68,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
         if (appState.isLogged && appState.user.role.level <= 20) {
           this.showMenuComanda = true;
 
-          if(appState.user.role.level <= 10){
+          if (appState.user.role.level <= 10) {
             this.showMenuAdmin = true;
-          } else{
+          } else {
             this.showMenuAdmin = false;
           }
         }
@@ -76,7 +79,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     })
   }
 
-  
+
   ngOnDestroy(): void {
     if (this.activeSubscription) {
       this.activeSubscription.unsubscribe();

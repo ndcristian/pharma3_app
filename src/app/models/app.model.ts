@@ -57,9 +57,17 @@ export interface NecessaryModel {
     modified?: Date;
     creator?: number;
     modifier?: number;
-    context?:number;
-    context_name?:string;
+    context?: number;
+    context_name?: string;
 
+}
+
+export interface NecessaryExportModel {
+    product?: string;
+    producer?: string;
+    necessary?: number;
+    data?: Date;
+    context?: string
 }
 
 export interface DepositModel {

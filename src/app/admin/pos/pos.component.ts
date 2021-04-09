@@ -1,9 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { ContextModel } from 'src/app/models/app.model';
+import { map } from 'rxjs/operators';
+import { ContextModel, NecessaryModel, NecessaryExportModel } from 'src/app/models/app.model';
 import { ROUTES_MODEL_CONFIG } from 'src/app/models/config.models';
 import { CrudService } from '../../services/crud.service';
+import * as XLSX from 'xlsx';
 
 
 @Component({
@@ -16,8 +18,9 @@ export class PosComponent implements OnInit, OnDestroy {
   posList: ContextModel[];
 
   posSubscription: Subscription;
+  necessaryExportSubscription: Subscription;
 
-  selectedRow:ContextModel;
+  selectedRow: ContextModel;
 
   constructor(private crudService: CrudService) { }
 
@@ -31,6 +34,10 @@ export class PosComponent implements OnInit, OnDestroy {
     if (this.posSubscription) {
       this.posSubscription.unsubscribe();
     }
+    if (this.necessaryExportSubscription) {
+      this.necessaryExportSubscription.unsubscribe();
+    }
+
   }
 
 
@@ -64,6 +71,57 @@ export class PosComponent implements OnInit, OnDestroy {
     console.log(pos, index, this.selectedRow);
     this.crudService.update(ROUTES_MODEL_CONFIG.contextes, this.selectedRow).subscribe((id: number) => {
     })
+  }
+
+  exportNecessary() {
+    console.log("EXPORT");
+    let exportNecessaryList: NecessaryExportModel[] = [];
+    this.necessaryExportSubscription = this.crudService.get(ROUTES_MODEL_CONFIG.necessaries).subscribe((items: Array<NecessaryModel>) => {
+      console.log("export", items);
+
+      items.forEach((item) => {
+        let necessaryExportModelItem: NecessaryExportModel = {
+          product: item[0].name,
+          producer: item[0].producer.name,
+          necessary: item[1],
+          data: new Date (Date.parse(item[4])),
+          context: item[7]
+
+        }
+
+        exportNecessaryList.push(necessaryExportModelItem);
+      })
+
+       /* table id is passed over here */   
+       let element = document.getElementById('posTable'); 
+       const ws: XLSX.WorkSheet =XLSX.utils.json_to_sheet(exportNecessaryList);
+
+       /* generate workbook and add the worksheet */
+       const wb: XLSX.WorkBook = XLSX.utils.book_new();
+       XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+       /* save to file */
+       XLSX.writeFile(wb, this.fileName);
+    })
+
+
+  }
+
+  /*name of the excel-file which will be downloaded. */
+  fileName = 'necesar.xlsx';
+
+  exportexcel(): void {
+    /* table id is passed over here */
+    let element = document.getElementById('posTable');
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    /* save to file */
+    XLSX.writeFile(wb, this.fileName);
+
   }
 
 }

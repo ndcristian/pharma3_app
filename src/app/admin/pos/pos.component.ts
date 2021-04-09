@@ -101,7 +101,7 @@ export class PosComponent implements OnInit, OnDestroy {
        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
 
        /* save to file */
-       XLSX.writeFile(wb, this.fileName);
+       XLSX.writeFile(wb, this.fileName); 
     })
 
 

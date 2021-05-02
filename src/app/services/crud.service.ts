@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpParams, HttpClient } from "@angular/common/http";
-import { environment } from '.././../environments/environment';
+import { environment } from '../../environments/environment';
 import {CrudFilter} from '../models/app.model';
 
 

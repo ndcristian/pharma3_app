@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit {
           /* cookie data created */
           cookieData.dlg = new Date().getTime();
         }
-        console.log(cookieData);
+        console.log("login componetn",cookieData);
         /* set cookie */
         this.cookieService.set(COOKIE_NAME, JSON.stringify(cookieData));
 

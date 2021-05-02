@@ -194,6 +194,7 @@ export class IstoricComponent implements OnInit {
     this.product = "";
     /* Reset filters */
     this.filters = {};
+    
     /* Get necessary from diferent sources dependin on isCentralizat */
     let crudFilter: CrudFilter[] = [
       { proprety: "from", value: this.appStateService.getAppState().before30Date.getTime().toString() },

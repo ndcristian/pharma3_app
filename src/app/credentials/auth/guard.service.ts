@@ -12,6 +12,7 @@ export class GuardService {
   constructor(
     private cookieService: CookieService,
     private appStateService: AppStateService,
+    private router: Router,
   ) { }
 
 
@@ -30,7 +31,6 @@ export class GuardService {
       if (this.appStateService.getAppState().user) {
 
         access = this.appStateService.getAppState().user.role.level;
-
         return this.checkRouteRights(activeUrlString, access);
 
       } else {
@@ -38,6 +38,7 @@ export class GuardService {
       }
 
     } else {
+      this.router.navigate(['/login']);
       return false;
     }
   }

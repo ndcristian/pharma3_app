@@ -33,34 +33,37 @@ export class MainviewComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     console.log("------MainviewComponent OnInit");
 
+    if (this.cookieService.check(COOKIE_NAME)) {
+      /* Set products in appState */  
+      this.productSubscription = this.crudService.get(ROUTES_MODEL_CONFIG.products).subscribe((items: Array<ProducerModel>) => {
+        this.currentAppstate = this.appStateService.getAppState();
+        this.appStateService.setAppState({ ...this.currentAppstate, products: items });
+        this.currentAppstate = this.appStateService.getAppState();
+        this.appStateService.appStateOnChange.next({ ...this.currentAppstate, action: UPDATE_PRODUCTS_PRODUCERS });
+      });
+  
+      /* Set producers in appState */
+      this.producerSubscription = this.crudService.get(ROUTES_MODEL_CONFIG.producers).subscribe((items: Array<ProducerModel>) => {
+        this.currentAppstate = this.appStateService.getAppState();
+        this.appStateService.setAppState({ ...this.currentAppstate, producers: items });
+        this.currentAppstate = this.appStateService.getAppState();
+        this.appStateService.appStateOnChange.next({ ...this.currentAppstate, action: UPDATE_PRODUCTS_PRODUCERS });
+      });
 
-    /* Set products in appState */
-    this.productSubscription = this.crudService.get(ROUTES_MODEL_CONFIG.products).subscribe((items: Array<ProducerModel>) => {
-      this.currentAppstate = this.appStateService.getAppState();
-      this.appStateService.setAppState({ ...this.currentAppstate, products: items });
-      this.currentAppstate = this.appStateService.getAppState();
-      this.appStateService.appStateOnChange.next({ ...this.currentAppstate, action: UPDATE_PRODUCTS_PRODUCERS });
-    });
+      /* Set context in appState */
+      this.contextSubscription = this.crudService.get(ROUTES_MODEL_CONFIG.contextes).subscribe((items: Array<ContextModel>) => {
+        this.appStateService.setAppState({ ...this.appStateService.getAppState(), context: items });
+        this.appStateService.appStateOnChange.next({ ...this.currentAppstate, action: UPDATE_CONTEXT });
+      });
 
-    /* Set producers in appState */
-    this.producerSubscription = this.crudService.get(ROUTES_MODEL_CONFIG.producers).subscribe((items: Array<ProducerModel>) => {
-      this.currentAppstate = this.appStateService.getAppState();
-      this.appStateService.setAppState({ ...this.currentAppstate, producers: items });
-      this.currentAppstate = this.appStateService.getAppState();
-      this.appStateService.appStateOnChange.next({ ...this.currentAppstate, action: UPDATE_PRODUCTS_PRODUCERS });
-    });
+      /* Set suppliers in appState */
+      this.contextSubscription = this.crudService.get(ROUTES_MODEL_CONFIG.suppliers).subscribe((items: Array<SupplierModel>) => {
+        this.appStateService.setAppState({ ...this.appStateService.getAppState(), supplier: items });
+        this.appStateService.appStateOnChange.next({ ...this.currentAppstate, action: UPDATE_SUPPLIERS });
+      })
+    }
 
-    /* Set context in appState */
-    this.contextSubscription = this.crudService.get(ROUTES_MODEL_CONFIG.contextes).subscribe((items: Array<ContextModel>) => {
-      this.appStateService.setAppState({ ...this.appStateService.getAppState(), context: items });
-      this.appStateService.appStateOnChange.next({ ...this.currentAppstate, action: UPDATE_CONTEXT });
-    });
 
-    /* Set suppliers in appState */
-    this.contextSubscription = this.crudService.get(ROUTES_MODEL_CONFIG.suppliers).subscribe((items: Array<SupplierModel>) => {
-      this.appStateService.setAppState({ ...this.appStateService.getAppState(), supplier: items });
-      this.appStateService.appStateOnChange.next({ ...this.currentAppstate, action: UPDATE_SUPPLIERS });
-    })
 
     /* If page refresh and cookie is set, check the if user in appState, else get it */
 

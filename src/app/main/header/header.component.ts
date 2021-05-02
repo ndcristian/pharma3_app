@@ -41,9 +41,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     console.log("------HeaderComponent OnInit");
 
-    this.userName = this.appStateService.getAppState().isLogged ? this.appStateService.getAppState().user.name : "";
-    this.pos = this.appStateService.getAppState().isLogged ? this.appStateService.getAppState().user.context.name : "";
-    this.separator = this.appStateService.getAppState().isLogged ? "@" : ""
+    // this.userName = this.appStateService.getAppState().isLogged ? this.appStateService.getAppState().user.name : "";
+    // this.pos = this.appStateService.getAppState().isLogged ? this.appStateService.getAppState().user.context.name : "";
+    // this.separator = this.appStateService.getAppState().isLogged ? "@" : "";
 
     this.showButtonLogin = !this.appStateService.getAppState().isLogged;
     this.showButtonLogout = this.appStateService.getAppState().isLogged;

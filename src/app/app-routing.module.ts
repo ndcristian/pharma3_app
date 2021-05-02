@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { AppComponent } from './app.component';
 import { NecesarComponent } from './main/necesar/necesar.component';
 import { ComandaComponent } from './main/comanda/comanda.component';
 import { IstoricComponent } from './main/istoric/istoric.component';
@@ -12,8 +13,14 @@ import { GuardService } from './credentials/auth/guard.service';
 
 const routes: Routes = [
   {
+    path: '',
+    component: MainviewComponent,
+    canActivate: [GuardService]
+  },
+  {
     path: 'main',
     component: MainviewComponent,
+    canActivate: [GuardService]
   },
   {
     path: 'necesar',

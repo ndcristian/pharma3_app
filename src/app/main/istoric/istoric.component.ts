@@ -2,7 +2,7 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewChildren, Afte
 import { Observable, Subject, merge, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
-import { ContextModel, DepositModel, ProducerModel, ProductModel, SupplierModel, NecessaryModel, OfferModel, HistoryModel } from 'src/app/models/app.model';
+import { ContextModel, DepositModel, ProducerModel, ProductModel, SupplierModel, NecessaryModel, OfferModel, HistoryModel, UserModel } from 'src/app/models/app.model';
 import { AppStateModel } from 'src/app/models/state.model';
 import { CrudService } from '../../services/crud.service';
 import { ROUTES_MODEL_CONFIG } from '../../models/config.models';
@@ -38,6 +38,7 @@ export class IstoricComponent implements OnInit {
   posSubscripton: Subscription;
   supplierSubscription: Subscription;
   necessarySubscription: Subscription;
+  modifierDetailsSubscription:Subscription;
 
   historyList: DepositModel[];
   supplierList: SupplierModel[];
@@ -214,6 +215,12 @@ export class IstoricComponent implements OnInit {
     });
 
 
+  }
+
+  showModifierName(id:number, index:number){
+    this.modifierDetailsSubscription = this.crudService.getById(ROUTES_MODEL_CONFIG.users, id).subscribe((item: UserModel) => {
+      this.historyList[index].modifier_name = item.name;
+    })
   }
 
 

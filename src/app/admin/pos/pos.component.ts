@@ -44,7 +44,7 @@ export class PosComponent implements OnInit, OnDestroy {
   onSubmit(form: NgForm) {
     if (form.valid) {
       this.crudService.post(ROUTES_MODEL_CONFIG.contextes, form.value).subscribe((id: Number) => {
-        console.log("inserted id:", id);
+        // console.log("inserted id:", id);
         this.posList.push(form.value);
       })
     } else {
@@ -61,23 +61,23 @@ export class PosComponent implements OnInit, OnDestroy {
   }
 
   delete(pos: ContextModel, index) {
-    console.log(pos, index);
+    // console.log(pos, index);
     this.crudService.delete(ROUTES_MODEL_CONFIG.contextes, pos.id).subscribe((id: number) => {
       this.posList.splice(index, 1);
     })
   }
 
   update(pos: ContextModel, index) {
-    console.log(pos, index, this.selectedRow);
+    // console.log(pos, index, this.selectedRow);
     this.crudService.update(ROUTES_MODEL_CONFIG.contextes, this.selectedRow).subscribe((id: number) => {
     })
   }
 
   exportNecessary() {
-    console.log("EXPORT");
+    // console.log("EXPORT");
     let exportNecessaryList: NecessaryExportModel[] = [];
     this.necessaryExportSubscription = this.crudService.get(ROUTES_MODEL_CONFIG.necessaries).subscribe((items: Array<NecessaryModel>) => {
-      console.log("export", items);
+      // console.log("export", items);
 
       items.forEach((item) => {
         let necessaryExportModelItem: NecessaryExportModel = {

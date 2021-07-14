@@ -33,9 +33,9 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
-    console.log(form.value);
+    // console.log(form.value);
     this.CrudService.post(ROUTES_MODEL_CONFIG.login, form.value).subscribe((credentials: AuthCredentials) => {
-      console.log(credentials);
+      // console.log(credentials);
 
       if (credentials.token) {
 
@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit {
           /* cookie data created */
           cookieData.dlg = new Date().getTime();
         }
-        console.log("login componetn",cookieData);
+        // console.log("login componetn",cookieData);
         /* set cookie */
         this.cookieService.set(COOKIE_NAME, JSON.stringify(cookieData));
 

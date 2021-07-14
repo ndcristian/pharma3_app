@@ -80,6 +80,7 @@
                 <thead>
                     <tr>
                         <th class="row-date">Data</th>
+                        <th class="row-qt">User</th>
                         <th class="row-supplier">Furnizor
                             <span class="material-icons sortIcon ">
                                 south
@@ -113,10 +114,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let row of historyList">
+                    <tr *ngFor="let row of historyList; let i=index">
 
                         <td class=" row-date allignCenter">
                             {{row.modified | date:'dd-LL-yyyy/hh:mm'}}
+                        </td>
+                        <td class=" row-qt allignCenter" (click)="showModifierName(row.modifier, i)">
+                            {{row.modifier_name}}
                         </td>
                         <td class=" row-supplier tabelRowLeft">
                             {{row.supplier.name}}

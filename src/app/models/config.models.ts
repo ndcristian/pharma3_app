@@ -15,7 +15,7 @@ export const ROUTES_MODEL_CONFIG = {
     register:"auth/register",
     contextes:"contextes",
     users:"users",
-    roles:"roles",
+        roles:"roles",
     suppliers:"suppliers",
     histories:"histories/date",
     historiesGetByProduct:"histories/product"

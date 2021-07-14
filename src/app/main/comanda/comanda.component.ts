@@ -3,7 +3,7 @@ import { Observable, Subject, merge, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { CrudService } from '../../services/crud.service';
-import { ContextModel, DepositModel, ProducerModel, ProductModel, SupplierModel, NecessaryModel, OfferModel, HistoryModel } from 'src/app/models/app.model';
+import { ContextModel, DepositModel, ProducerModel, ProductModel, SupplierModel, NecessaryModel, OfferModel, HistoryModel, UserModel } from 'src/app/models/app.model';
 import { ROUTES_MODEL_CONFIG } from '../../models/config.models';
 import { AppStateService } from '../../services/app-state.service';
 import { AppStateModel } from 'src/app/models/state.model';
@@ -45,6 +45,7 @@ export class ComandaComponent implements OnInit, OnDestroy {
   historyDetailsSubscription: Subscription;
   necessaryDetailsSubscription: Subscription;
   offerDetailsSubscription: Subscription;
+  modifierDetailsSubscription: Subscription;
 
   necessaryList: DepositModel[];
   supplierList: SupplierModel[];
@@ -66,6 +67,7 @@ export class ComandaComponent implements OnInit, OnDestroy {
 
   /* if supplier is changed, reset all discount and price noticed before */
   supplierChanged: boolean = false;
+
 
   constructor(private crudService: CrudService, private appStateService: AppStateService) { }
 
@@ -150,6 +152,9 @@ export class ComandaComponent implements OnInit, OnDestroy {
     if (this.offerDetailsSubscription) {
       this.offerDetailsSubscription.unsubscribe();
     }
+    if (this.modifierDetailsSubscription) {
+      this.modifierDetailsSubscription.unsubscribe();
+    }
 
 
   }
@@ -167,7 +172,7 @@ export class ComandaComponent implements OnInit, OnDestroy {
   }
 
   onSelectProduct(product: ProductModel) {
-        this.filters.product = product;;
+    this.filters.product = product;;
     this.producer = product.producer;
   }
 
@@ -401,6 +406,12 @@ export class ComandaComponent implements OnInit, OnDestroy {
         break;
     }
 
+  }
+
+  showModifierName(id: number, index, number) {
+    this.modifierDetailsSubscription = this.crudService.getById(ROUTES_MODEL_CONFIG.users, id).subscribe((item: UserModel) => {
+      this.necessaryDetailsList[index].modifier_name = item.name;
+    })
   }
 
   /* Refesh  necessary details when details button is pressed */

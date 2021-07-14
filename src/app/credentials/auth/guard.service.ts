@@ -22,7 +22,7 @@ export class GuardService {
     let access: number;
     let activeUrl = activeRoute.url;
     let activeUrlString = stateRoute.url;
-    console.log("canActivate::", access, activeUrl, activeUrlString);
+    // console.log("canActivate::", access, activeUrl, activeUrlString);
 
     /* check if cookie exist */
     if (this.cookieService.check(COOKIE_NAME)) {
@@ -55,7 +55,7 @@ export class GuardService {
           return access <= 10 ? true : false;
           break;
         default:
-          console.log("No route match...");
+          // console.log("No route match...");
           return true;
           break;
       }

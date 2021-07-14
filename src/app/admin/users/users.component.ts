@@ -32,30 +32,30 @@ export class UsersComponent implements OnInit, OnDestroy {
     /* Get users */
     this.credentialSubscription = this.crudService.get(ROUTES_MODEL_CONFIG.credentials).subscribe((items: Array<CredentialModel>) => {
       this.usersList = items;
-      console.log("UsersComponent users", items);
+      // console.log("UsersComponent users", items);
     })
 
     /* Get roles */
     this.roleSubscription = this.crudService.get(ROUTES_MODEL_CONFIG.roles).subscribe((items: Array<RoleModel>) => {
       this.rolesList = items;
-      console.log("UsersComponent roles", items);
+      // console.log("UsersComponent roles", items);
       /* Define default role */
       this.defaultRole = this.rolesList.filter((r) => {
         return r.implicit == true;
       })
-      console.log(":default role", this.defaultRole)
+      // console.log(":default role", this.defaultRole);
 
     })
 
     /* Get contextes */
     this.contextSubscription = this.crudService.get(ROUTES_MODEL_CONFIG.contextes).subscribe((items: Array<ContextModel>) => {
       this.contextesList = items;
-      console.log("UsersComponent context", items);
+      // console.log("UsersComponent context", items);
       /* Define default context */
       this.defaultContext = this.contextesList.filter((c) => {
         return c.implicit == true;
       })
-      console.log(":default context", this.defaultContext)
+      // console.log(":default context", this.defaultContext);
     })
 
   }
@@ -83,9 +83,9 @@ export class UsersComponent implements OnInit, OnDestroy {
         role: this.defaultRole[0],
         context: this.defaultContext[0]
       }
-      console.log(userToInsert)
+      // console.log(userToInsert);
       this.crudService.post(ROUTES_MODEL_CONFIG.register, userToInsert).subscribe((id: number) => {
-     console.log("inserted id:",id )
+    //  console.log("inserted id:",id );
         if (id && id > 0) {
           this.usersList.push(userToInsert);
           /* assign id to user added */
@@ -102,7 +102,7 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   /* Row select - set selected user */
   onSelectRow(credentials: CredentialModel) {
-    console.log("onSelectRow::", credentials);
+    // console.log("onSelectRow::", credentials);
     this.selectedUserCredentials = credentials;
 
   }
@@ -132,14 +132,14 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   onChangePassword(value: string) {
-    console.log("onChangePassword:::", value);
+    // console.log("onChangePassword:::", value);
     this.selectedUserCredentials.password = value;
   }
 
 
 
   update() {
-    console.log(this.selectedUserCredentials)
+    // console.log(this.selectedUserCredentials);
     this.crudService.update(ROUTES_MODEL_CONFIG.credentials, this.selectedUserCredentials).subscribe((id: number) => {
 
     })
@@ -150,7 +150,7 @@ export class UsersComponent implements OnInit, OnDestroy {
       this.usersList.splice(index, 1);
     })
 
-    console.log("deleted id:", credentials, index);
+    // console.log("deleted id:", credentials, index);
   }
 
 }

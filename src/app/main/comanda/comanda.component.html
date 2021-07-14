@@ -213,10 +213,11 @@
                             <th class="row-qt">Cantitate</th>
                             <th class="row-date">Data</th>
                             <th class="row-obs">Observatii</th>
+                            <th class="row-date"> User</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let necessaryDetails of necessaryDetailsList">
+                        <tr *ngFor="let necessaryDetails of necessaryDetailsList; let i=index">
 
                             <td class="tabelRowLeft row-pl">
                                 {{necessaryDetails.context_name}}
@@ -229,6 +230,9 @@
                             </td>
                             <td class="tabelRowLeft row-obs">
                                 {{necessaryDetails.obs}}
+                            </td>
+                            <td class="tabelRowLeft row-obs" (click)="showModifierName(necessaryDetails.modifier, i)">
+                                {{necessaryDetails.modifier_name}}
                             </td>
                         </tr>
                     </tbody>

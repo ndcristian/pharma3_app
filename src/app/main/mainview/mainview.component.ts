@@ -31,7 +31,7 @@ export class MainviewComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    console.log("------MainviewComponent OnInit");
+    // console.log("------MainviewComponent OnInit");
 
     if (this.cookieService.check(COOKIE_NAME)) {
       /* Set products in appState */  
@@ -87,7 +87,7 @@ export class MainviewComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    console.log("-------MainviewComponent::ngOnDestroy ")
+    // console.log("-------MainviewComponent::ngOnDestroy ");
     if (this.productSubscription) {
       this.productSubscription.unsubscribe()
     }

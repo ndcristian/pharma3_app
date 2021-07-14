@@ -16,7 +16,7 @@ export class MessageComponent implements OnInit {
 
     this.event.message = this.route.snapshot.paramMap.get('message');
     if(this.event.message==""){}
-    console.log("%%%%%%%%", this.event);
+    // console.log("%%%%%%%%", this.event);
   }
 
 }

@@ -36,7 +36,7 @@ export class SuppliersComponent implements OnInit {
   onSubmit(form: NgForm) {
     if (form.valid) {
       this.crudService.post(ROUTES_MODEL_CONFIG.suppliers, form.value).subscribe((id: Number) => {
-        console.log("inserted id:", id);
+        // console.log("inserted id:", id);
         this.supplierList.push(form.value);
         
       })
@@ -54,14 +54,14 @@ export class SuppliersComponent implements OnInit {
   }
 
   delete(pos: ContextModel, index) {
-    console.log(pos, index);
+    // console.log(pos, index);
     this.crudService.delete(ROUTES_MODEL_CONFIG.contextes, pos.id).subscribe((id: number) => {
       this.supplierList.splice(index, 1);
     })
   }
 
   update(pos: ContextModel, index) {
-    console.log(pos, index, this.selectedRow);
+    // console.log(pos, index, this.selectedRow);
     this.crudService.update(ROUTES_MODEL_CONFIG.contextes, this.selectedRow).subscribe((id: number) => {
     })
   }

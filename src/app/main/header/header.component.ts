@@ -39,7 +39,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   activeSubscription: Subscription;
 
   ngOnInit(): void {
-    console.log("------HeaderComponent OnInit");
+    // console.log("------HeaderComponent OnInit");
 
     // this.userName = this.appStateService.getAppState().isLogged ? this.appStateService.getAppState().user.name : "";
     // this.pos = this.appStateService.getAppState().isLogged ? this.appStateService.getAppState().user.context.name : "";
@@ -51,7 +51,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.activeSubscription = this.appStateService.appStateOnChange.subscribe((appState: AppStateModel) => {
 
       if (appState.action == UPDATE_USER) {
-        console.log("HeaderBar component onInit:subscribe UPDATE_USER", this.appStateService.getAppState());
+        // console.log("HeaderBar component onInit:subscribe UPDATE_USER", this.appStateService.getAppState());
         this.user = appState.user ? appState.user : { name: '', context:{name:''} };
         this.userName = this.user.name;
         this.pos = this.user.context.name;

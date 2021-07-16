@@ -23,7 +23,7 @@ export class IstoricComponent implements OnInit {
 
   @ViewChild('productInput', { static: true }) productInput: NgbTypeahead;
   @ViewChild('producerInput', { static: true }) producerInput: NgbTypeahead;
-  
+
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
 
@@ -38,7 +38,7 @@ export class IstoricComponent implements OnInit {
   posSubscripton: Subscription;
   supplierSubscription: Subscription;
   necessarySubscription: Subscription;
-  modifierDetailsSubscription:Subscription;
+  modifierDetailsSubscription: Subscription;
 
   historyList: DepositModel[];
   supplierList: SupplierModel[];
@@ -105,25 +105,30 @@ export class IstoricComponent implements OnInit {
 
       if (appState.action == UPDATE_SUPPLIERS) {
         this.supplierList = appState.supplier;
+// debugger;
+        /* Set selectedSupplier as default */
+        this.selectedSupplier = this.supplierList.filter((s: SupplierModel) => {
+          return s.implicit == true;
+        })[0];
+
       }
-      /* Set selectedSupplier as default */
-      this.selectedSupplier = this.supplierList.filter((s: SupplierModel) => {
-        return s.implicit == true;
-      })[0];
+
 
       if (appState.action == UPDATE_CONTEXT) {
         this.contextList = appState.context;
+
+        /* Set selectedSupplier as default */
+        this.selectedContext = this.contextList.filter((c: ContextModel) => {
+          return c.implicit == true;
+        })[0];
+        
       }
 
-      /* Set selectedSupplier as default */
-      this.selectedContext = this.contextList.filter((c: ContextModel) => {
-        return c.implicit == true;
-      })[0];
 
-      console.log("ComandaComponent state after subscriptions==", this.appStateService.getAppState());
+      // console.log("ComandaComponent state after subscriptions==", this.appStateService.getAppState());
 
     });
-    
+
     /* Get/update necessary data */
     this.refreshNcessaryData();
   }
@@ -195,10 +200,10 @@ export class IstoricComponent implements OnInit {
     this.product = "";
     /* Reset filters */
     this.filters = {};
-    
+
     /* Get necessary from diferent sources dependin on isCentralizat */
     let crudFilter: CrudFilter[] = [
-      { proprety: "from", value: this.appStateService.getAppState().before30Date.getTime().toString() },
+      { proprety: "from", value: moment().subtract(30, 'days').toDate().getTime().toString() },
       { proprety: "to", value: moment().toDate().getTime().toString() },
       /* in deposit all records have 0 at context */
       { proprety: "context", value: this.isCentralizat ? '0' : this.selectedContext.id.toString() }
@@ -217,7 +222,7 @@ export class IstoricComponent implements OnInit {
 
   }
 
-  showModifierName(id:number, index:number){
+  showModifierName(id: number, index: number) {
     this.modifierDetailsSubscription = this.crudService.getById(ROUTES_MODEL_CONFIG.users, id).subscribe((item: UserModel) => {
       this.historyList[index].modifier_name = item.name;
     })
